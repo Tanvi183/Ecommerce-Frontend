@@ -10,7 +10,25 @@ import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { label: "ALL PRODUCTS",  href: ROUTES.products },
-  { label: "WALLPAPER",     href: ROUTES.wallpaper },
+  { 
+    label: "WALLPAPER",     
+    href: ROUTES.wallpaper,
+    subLinks: [
+      { label: "3D Wallpaper", href: "/category/3d-wallpaper" },
+      { label: "Brick Wallpaper", href: "/category/brick-wallpaper" },
+      { label: "Colour Bank Tesla", href: "/category/colour-bank-tesla" },
+      { label: "European wallpaper", href: "/category/european-wallpaper" },
+      { label: "Floral Wallpaper", href: "/category/floral-wallpaper" },
+      { label: "Foam Wallpaper", href: "/category/foam-wallpaper" },
+      { label: "Geometric Wallpaper", href: "/category/geometric-wallpaper" },
+      { label: "Home Wallpaper", href: "/category/home-wallpaper" },
+      { label: "Kids Wallpaper", href: "/category/kids-wallpaper" },
+      { label: "Metallic Wallpaper", href: "/category/metallic-wallpaper" },
+      { label: "P-T VOL-2", href: "/category/p-t-vol-2" },
+      { label: "Premium-Textured-wallpaper", href: "/category/premium-textured-wallpaper" },
+      { label: "Textured Wallpaper", href: "/category/textured-wallpaper" }
+    ]
+  },
   { label: "FLOOR ITEM",    href: ROUTES.floorItem },
   { label: "BLIND",         href: ROUTES.blind },
   { label: "OFFER",         href: ROUTES.offers, isOffer: true },
@@ -136,20 +154,43 @@ export default function Navbar({ cartCount = 0, totalPrice = 0, wishlistCount = 
             {NAV_LINKS.map((link) => {
               const isActive = pathname === link.href;
               return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "px-4 text-[13px] font-bold transition-colors flex items-center h-full",
-                    isActive
-                      ? "text-[#dc3545]"
-                      : link.isOffer
-                        ? "text-[var(--accent)] hover:text-[var(--accent-dark)]"
-                        : "text-[#333] hover:text-[var(--primary)]"
+                <div key={link.href} className="group h-full flex items-center relative">
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      "px-4 text-[13px] font-bold transition-colors flex items-center h-full",
+                      isActive
+                        ? "text-[#dc3545]"
+                        : link.isOffer
+                          ? "text-[var(--accent)] hover:text-[var(--accent-dark)]"
+                          : "text-[#333] group-hover:text-[var(--primary)]"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+
+                  {/* Dropdown Menu */}
+                  {link.subLinks && (
+                    <div className="absolute top-full left-0 bg-white min-w-[220px] shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 border-t border-[#e5e5e5]">
+                      {/* Triangle Pointer */}
+                      <div className="absolute -top-2 left-6 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-[#e5e5e5]"></div>
+                      <div className="absolute -top-[7px] left-6 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-white"></div>
+                      
+                      <ul className="py-2">
+                        {link.subLinks.map(sub => (
+                          <li key={sub.href}>
+                            <Link 
+                              href={sub.href}
+                              className="block px-5 py-2.5 text-[14px] text-[#004f7b] hover:text-[#277b8c] hover:bg-[#f8f9fa] transition-colors"
+                            >
+                              {sub.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
-                >
-                  {link.label}
-                </Link>
+                </div>
               );
             })}
           </nav>

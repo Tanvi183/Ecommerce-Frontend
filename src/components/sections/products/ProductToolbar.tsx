@@ -1,18 +1,39 @@
 "use client";
 
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+
 interface ProductToolbarProps {
   total: number;
 }
 
 export default function ProductToolbar({ total }: ProductToolbarProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const viewMode = searchParams.get("view") || "grid";
+
+  const handleViewChange = (view: "grid" | "list") => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("view", view);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <div className="bg-[#f8f8f8] border border-[#dddddd] p-3 flex flex-wrap items-center justify-between mb-6 gap-4">
       {/* View Toggles (List/Grid) */}
       <div className="flex items-center gap-2">
-        <button className="w-8 h-8 flex items-center justify-center bg-[var(--primary)] text-white border border-[var(--primary-dark)]" title="Grid View">
+        <button 
+          onClick={() => handleViewChange("grid")}
+          className={`w-8 h-8 flex items-center justify-center border transition-colors ${viewMode === "grid" ? "bg-[var(--primary)] text-white border-[var(--primary-dark)]" : "bg-white text-[#666666] border-[#dddddd] hover:text-[var(--primary)]"}`}
+          title="Grid View"
+        >
           <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z"/></svg>
         </button>
-        <button className="w-8 h-8 flex items-center justify-center bg-white text-[#666666] border border-[#dddddd] hover:text-[var(--primary)]" title="List View">
+        <button 
+          onClick={() => handleViewChange("list")}
+          className={`w-8 h-8 flex items-center justify-center border transition-colors ${viewMode === "list" ? "bg-[var(--primary)] text-white border-[var(--primary-dark)]" : "bg-white text-[#666666] border-[#dddddd] hover:text-[var(--primary)]"}`} 
+          title="List View"
+        >
           <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
         </button>
         <span className="text-[13px] text-[#696973] ml-2 hidden sm:inline-block">Product Compare (0)</span>

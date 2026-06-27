@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/cards/ProductCard";
 import { dummyProducts } from "@/constants/dummyProducts";
 
 export default function ProductGrid() {
   const [wishlist, setWishlist] = useState<string[]>([]);
+  const searchParams = useSearchParams();
+  const viewMode = searchParams.get("view") || "grid";
   
   // For demo, we just use the first 12 dummy products
   const products = dummyProducts.slice(0, 12);
@@ -18,11 +21,12 @@ export default function ProductGrid() {
 
   return (
     <div>
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className={viewMode === "list" ? "flex flex-col gap-6" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"}>
         {products.map((product) => (
           <ProductCard
             key={product.id}
             product={product}
+            viewMode={viewMode as "grid" | "list"}
             isWishlisted={wishlist.includes(product.id)}
             onToggleWishlist={handleToggleWishlist}
             onAddToCart={(p) => console.log("Add to cart", p.name)}
