@@ -48,7 +48,7 @@ export default function PopularCategory() {
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <div className="bg-[#2c3840] text-white text-center py-2.5 text-[13px] font-bold">
+                  <div className="bg-[#2c3840] group-hover:bg-[#ffc107] text-white text-center py-2.5 text-[15px] font-medium transition-colors">
                     {category.name}
                   </div>
                 </div>

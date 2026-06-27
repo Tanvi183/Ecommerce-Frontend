@@ -18,8 +18,14 @@ export default function FeaturedProducts() {
   const [activeTab, setActiveTab] = useState<TabKey>("latest");
   const [wishlist, setWishlist] = useState<string[]>([]);
 
-  // Simple filter simulation
-  const filteredProducts = dummyProducts.slice(0, 8); // showing 8 items max for grid
+  // Filter dummy products based on active tab
+  const filteredProducts = dummyProducts.filter(p => {
+    if (activeTab === "latest") return p.isNew;
+    if (activeTab === "best_rated") return p.rating >= 4.5;
+    if (activeTab === "specials") return p.isOnSale;
+    if (activeTab === "bestsellers") return p.isBestSeller;
+    return true;
+  }).slice(0, 8); // showing 8 items max for grid
 
   const handleAddToCart = (product: any) => {
     console.log("Add to cart", product);

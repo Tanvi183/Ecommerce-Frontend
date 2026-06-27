@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Container from "@/components/common/Container";
 import Logo from "@/components/common/Logo";
 import { ROUTES } from "@/constants/routes";
@@ -30,6 +31,7 @@ interface NavbarProps {
 
 export default function Navbar({ cartCount = 0, totalPrice = 0, wishlistCount = 0, onCartOpen, onMobileNavOpen }: NavbarProps) {
   const [search, setSearch] = useState("");
+  const pathname = usePathname();
 
   return (
     <header id="main-navbar" className="w-full bg-[var(--background)] border-b border-[var(--border)]">
@@ -131,18 +133,25 @@ export default function Navbar({ cartCount = 0, totalPrice = 0, wishlistCount = 
         <Container className="flex justify-between items-center relative h-12">
           {/* Main Links */}
           <nav className="flex items-center h-full">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "px-4 text-[13px] font-bold transition-colors flex items-center h-full",
-                  link.isOffer ? "text-[var(--accent)] hover:text-[var(--accent-dark)]" : "text-[#333] hover:text-[var(--primary)]"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "px-4 text-[13px] font-bold transition-colors flex items-center h-full",
+                    isActive
+                      ? "text-[#dc3545]"
+                      : link.isOffer
+                        ? "text-[var(--accent)] hover:text-[var(--accent-dark)]"
+                        : "text-[#333] hover:text-[var(--primary)]"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Cart Block */}
