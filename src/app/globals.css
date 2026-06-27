@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --font-inter: Arial, Helvetica, sans-serif;
+  --font-poppins: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  :root {
+    /* Core Colors */
+    --background: #f8f9fa; /* Light grey body background */
+    --foreground: #333333; /* Dark text */
+    
+    /* Exact Reference Site Colors */
+    --primary: #186675; /* Dark teal used for buttons/active states */
+    --primary-dark: #124d58;
+    --primary-light: #1e7e91;
+    
+    --secondary: #2c3840; /* Footer background / Dark blue-grey */
+    --secondary-light: #3a4a55;
+    
+    --accent: #d9534f; /* Red used for OFFER, alerts */
+    --accent-dark: #c9302c;
+    --accent-foreground: #ffffff;
+    
+    /* Utilities */
+    --muted: #e9ecef;
+    --muted-foreground: #6c757d;
+    --border: #dee2e6;
+    --input-border: #cccccc;
+    
+    /* Layout */
+    --card: #ffffff;
+    --footer-bg: #29353e;
+    
+    /* UI States */
+    --success: #28a745;
+    --warning: #ffc107;
+    --destructive: #dc3545;
+    
+    /* Structure - BOXY, NO ROUNDED CORNERS */
+    --radius-sm: 0px;
+    --radius: 0px;
+    --radius-lg: 0px;
+    --radius-full: 50%;
+    
+    /* Structure - NO SOFT SHADOWS */
+    --shadow-sm: none;
+    --shadow: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-card: none;
+    --shadow-card-hover: 0 4px 8px rgba(0,0,0,0.1); /* Very subtle hover shadow */
+  }
+
+  [data-theme="dark"] {
+    /* No dark mode on reference site, forcing light */
+    --background: #f8f9fa;
+    --foreground: #333333;
+    --card: #ffffff;
+    --border: #dee2e6;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+}
+
+/* Custom Utility Classes */
+@layer utilities {
+  .section-py {
+    @apply py-10 sm:py-12;
+  }
+}
