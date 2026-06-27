@@ -4,11 +4,12 @@ import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Container from "@/components/common/Container";
 import Logo from "@/components/common/Logo";
 import { ROUTES } from "@/constants/routes";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 
 const NAV_LINKS = [
   { label: "ALL PRODUCTS",  href: ROUTES.products },
@@ -23,12 +24,12 @@ const NAV_LINKS = [
       { label: "Floral Wallpaper", href: "/category/floral-wallpaper" },
       { label: "Foam Wallpaper", href: "/category/foam-wallpaper" },
       { label: "Geometric Wallpaper", href: "/category/geometric-wallpaper" },
-      { label: "Home Wallpaper", href: "/category/home-wallpaper" },
-      { label: "Kids Wallpaper", href: "/category/kids-wallpaper" },
-      { label: "Metallic Wallpaper", href: "/category/metallic-wallpaper" },
-      { label: "P-T VOL-2", href: "/category/p-t-vol-2" },
-      { label: "Premium-Textured-wallpaper", href: "/category/premium-textured-wallpaper" },
-      { label: "Textured Wallpaper", href: "/category/textured-wallpaper" }
+      { label: "Korean Wallpaper", href: "/category/korean-wallpaper" },
+      { label: "PVC Wallpaper", href: "/category/pvc-wallpaper" },
+      { label: "Stone Wallpaper", href: "/category/stone-wallpaper" },
+      { label: "Textured Wallpaper", href: "/category/textured-wallpaper" },
+      { label: "Vinyl Wallpaper", href: "/category/vinyl-wallpaper" },
+      { label: "Wooden Wallpaper", href: "/category/wooden-wallpaper" }
     ]
   },
   { 
@@ -38,12 +39,11 @@ const NAV_LINKS = [
       { label: "Artificial Grass", href: "/category/artificial-grass" },
       { label: "Decking Floor", href: "/category/decking-floor" },
       { label: "Floor Carpet", href: "/category/floor-carpet" },
-      { label: "Pvc Coil Mats", href: "/category/pvc-coil-mats" },
-      { label: "PVC Floor", href: "/category/pvc-floor" },
-      { label: "PVC Floor Mats", href: "/category/pvc-floor-mats" },
-      { label: "Pvc Vinyl floor mat", href: "/category/pvc-vinyl-floor-mat" },
-      { label: "SPC Flooring", href: "/category/spc-flooring" },
-      { label: "Wooden Floor", href: "/category/wooden-floor" }
+      { label: "Floor Mat", href: "/category/floor-mat" },
+      { label: "Floor Runner", href: "/category/floor-runner" },
+      { label: "Rubber Floor", href: "/category/rubber-floor" },
+      { label: "SPC Floor", href: "/category/spc-floor" },
+      { label: "Vinyl Floor", href: "/category/vinyl-floor" }
     ]
   },
   { label: "BLIND",         href: ROUTES.blind },
@@ -53,16 +53,16 @@ const NAV_LINKS = [
     label: "WALL PANEL",    
     href: ROUTES.wallPanel,
     subLinks: [
-      { label: "3D Wall Panel", href: "/category/3d-wall-panel" },
       { label: "Acoustic Panel", href: "/category/acoustic-panel" },
       { label: "Charcoal Louver Panel", href: "/category/charcoal-louver-panel" },
       { label: "PU Stone Wall Panels", href: "/category/pu-stone-wall-panels" },
       { label: "WPC", href: "/category/wpc" }
     ]
   },
-  { label: "KITCHEN ITEM",  href: ROUTES.kitchenItem },
-  { label: "ABOUT",         href: ROUTES.about },
-  { label: "CONTACT",       href: ROUTES.contact },
+  { label: "KITCHEN ITEM",    href: ROUTES.kitchenItem },
+  { label: "OTHERS FEATURE",  href: "/others-feature" },
+  { label: "ABOUT",           href: ROUTES.about },
+  { label: "CONTACT",         href: ROUTES.contact },
 ];
 
 interface NavbarProps {
@@ -78,6 +78,8 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
   const [isMounted, setIsMounted] = useState(false);
   const cartTotalItems = useCartStore((state) => state.totalItems);
   const cartTotalPrice = useCartStore((state) => state.totalPrice);
+  const cartItemsStore = useCartStore((state) => state.items);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
   const wishlistItems = useWishlistStore((state) => state.items);
 
   useEffect(() => {
@@ -86,6 +88,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
 
   const cartCount = isMounted ? cartTotalItems : 0;
   const totalPrice = isMounted ? cartTotalPrice : 0;
+  const cartItems = isMounted ? cartItemsStore : [];
   const wishlistCount = isMounted ? wishlistItems.length : 0;
 
   return (
@@ -208,8 +211,8 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
       </div>
 
       {/* ── Nav links row ── */}
-      <div className="hidden lg:block bg-white border-t border-[var(--border)] relative">
-        <Container className="flex justify-between items-center relative h-12">
+      <div className="hidden lg:block bg-white border-t border-b border-[#e5e5e5] relative">
+        <Container className="flex justify-between items-center relative h-[50px]">
           {/* Main Links */}
           <nav className="flex items-center h-full">
             {NAV_LINKS.map((link) => {
@@ -219,12 +222,12 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                   <Link
                     href={link.href}
                     className={cn(
-                      "px-4 text-[13px] font-bold transition-colors flex items-center h-full",
-                      isActive
-                        ? "text-[#dc3545]"
-                        : link.isOffer
-                          ? "text-[var(--accent)] hover:text-[var(--accent-dark)]"
-                          : "text-[#333] group-hover:text-[var(--primary)]"
+                      "px-2 xl:px-3 text-[12px] font-sans font-bold transition-colors flex items-center h-full",
+                      link.isOffer
+                        ? "text-[#e11b22]"
+                        : isActive
+                          ? "text-[#e11b22]"
+                          : "text-[#333333] group-hover:text-[var(--primary)]"
                     )}
                   >
                     {link.label}
@@ -257,23 +260,98 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
           </nav>
 
           {/* Cart Block */}
-          <div className="flex items-center h-full border-l border-[var(--border)] pl-4 ml-4">
-            <span className="text-[13px] font-bold text-[#333] mr-4">
-              {cartCount} item(s) - {totalPrice}৳
-            </span>
-            <button 
-              onClick={onCartOpen}
-              className="bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white h-full px-5 flex items-center justify-center transition-colors relative"
+          <div className="flex items-center h-[50px] my-auto ml-2 pl-4 border-l border-[#e5e5e5] relative group cursor-pointer">
+            <div className="px-4 h-full flex items-center justify-center">
+              <span className="text-[14px] font-normal text-[#333]">
+                {cartCount} item(s) - {formatPrice(totalPrice)}
+              </span>
+            </div>
+            <Link 
+              href={ROUTES.cart}
+              className="bg-[#277b8c] hover:bg-[#186675] text-white h-[50px] px-4 flex items-center justify-center transition-colors relative"
             >
-              <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" />
+              <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                <rect x="4" y="7" width="16" height="14" rx="1.5" />
+                <path d="M8 7V5a4 4 0 0 1 8 0v2" />
               </svg>
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-[var(--destructive)] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
+              {/* Overlapping Badge */}
+              <span className="absolute -top-[6px] -right-[6px] bg-[#e11b22] text-white text-[11px] font-bold min-w-[20px] h-[20px] px-1 rounded-full flex items-center justify-center leading-none border-2 border-white shadow-sm">
+                {cartCount}
+              </span>
+            </Link>
+
+            {/* Cart Dropdown */}
+            <div className="absolute top-full right-0 mt-0 w-[350px] bg-[#f8f9fa] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-[#e5e5e5] before:content-[''] before:absolute before:-top-[8px] before:right-6 before:border-[8px] before:border-transparent before:border-b-[#f8f9fa]">
+              {cartCount === 0 ? (
+                <div className="p-6 text-center text-[13px] text-[#666]">
+                  Your shopping cart is empty!
+                </div>
+              ) : (
+                <>
+                  {/* Item List */}
+                  <div className="max-h-[300px] overflow-y-auto">
+                    {cartItems.map((item) => (
+                      <div key={item.id} className="flex items-center gap-3 p-3 border-b border-[#e5e5e5] bg-white">
+                        <Link href={ROUTES.productDetail(item.product.slug)} className="flex-shrink-0 w-[60px] h-[60px] border border-[#e5e5e5] relative">
+                          <Image src={item.product.thumbnail} alt={item.product.name} fill className="object-cover p-1" />
+                        </Link>
+                        <div className="flex-1 min-w-0">
+                          <Link href={ROUTES.productDetail(item.product.slug)} className="text-[13px] text-[#186675] hover:underline font-bold truncate block">
+                            {item.product.name}
+                          </Link>
+                        </div>
+                        <div className="text-[13px] text-[#333]">x {item.quantity}</div>
+                        <div className="text-[13px] font-bold text-[#333] w-[60px] text-right">{formatPrice(item.price)}</div>
+                        <button 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            removeFromCart(item.id);
+                          }}
+                          className="text-[#d9534f] hover:text-[#c9302c] transition-colors p-1"
+                        >
+                          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Totals */}
+                  <div className="p-3 bg-[#f8f9fa] border-b border-[#e5e5e5]">
+                    <div className="flex justify-end gap-6 mb-2 text-[13px]">
+                      <span className="font-bold text-[#333]">Sub-Total</span>
+                      <span className="text-[#333] font-bold w-[70px] text-right">{formatPrice(totalPrice)}</span>
+                    </div>
+                    <div className="flex justify-end gap-6 text-[13px]">
+                      <span className="font-bold text-[#333]">Total</span>
+                      <span className="text-[#333] font-bold w-[70px] text-right">{formatPrice(totalPrice)}</span>
+                    </div>
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="p-3 bg-[#e9ecef] flex gap-2">
+                    <Link 
+                      href={ROUTES.cart}
+                      className="flex-1 bg-[#186675] text-white py-2 flex items-center justify-center gap-2 hover:bg-[#13525e] transition-colors text-[13px] font-bold"
+                    >
+                      <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" />
+                      </svg>
+                      View Cart
+                    </Link>
+                    <Link 
+                      href={ROUTES.checkout}
+                      className="flex-1 bg-[#186675] text-white py-2 flex items-center justify-center gap-2 hover:bg-[#13525e] transition-colors text-[13px] font-bold"
+                    >
+                      Checkout
+                      <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                      </svg>
+                    </Link>
+                  </div>
+                </>
               )}
-            </button>
+            </div>
           </div>
         </Container>
       </div>
