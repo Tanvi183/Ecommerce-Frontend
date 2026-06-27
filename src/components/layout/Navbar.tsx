@@ -60,7 +60,22 @@ const NAV_LINKS = [
     ]
   },
   { label: "KITCHEN ITEM",    href: ROUTES.kitchenItem },
-  { label: "OTHERS FEATURE",  href: "/others-feature" },
+  { 
+    label: "OTHERS FEATURE",  
+    href: "/others-feature",
+    subLinks: [
+      { label: "Artifical Plant", href: "/category/artifical-plant" },
+      { label: "Flexible Soft Stone", href: "/category/flexible-soft-stone" },
+      { label: "Glass Workshop", href: "/category/glass-workshop" },
+      { label: "Metal Workshop", href: "/category/metal-workshop" },
+      { label: "Service", href: "/category/service" },
+      { label: "Steel Strips", href: "/category/steel-strips" },
+      { label: "Table Cover Protector", href: "/category/table-cover-protector" },
+      { label: "Wall Moulding", href: "/category/wall-moulding" },
+      { label: "Wall Shelf", href: "/category/wall-shelf" },
+      { label: "Water Fountain", href: "/category/water-fountain" }
+    ]
+  },
   { label: "ABOUT",           href: ROUTES.about },
   { label: "CONTACT",         href: ROUTES.contact },
 ];
@@ -72,6 +87,7 @@ interface NavbarProps {
 
 export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
   const [search, setSearch] = useState("");
+  const [searchCategory, setSearchCategory] = useState("All");
   const pathname = usePathname();
   
   // Hydration-safe store reads
@@ -102,33 +118,59 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
           </div>
 
           {/* Search bar */}
-          <div className="flex-1 hidden md:flex max-w-2xl mx-auto">
-            <div className="flex w-full border border-[var(--input-border)]">
-              <select
-                id="search-category-select"
-                className="bg-[var(--primary)] text-white text-sm px-4 py-2.5 border-none outline-none cursor-pointer border-r border-[var(--primary-dark)]"
-                defaultValue="all"
-              >
-                <option value="all">All</option>
-                <option value="wallpaper">Wallpaper</option>
-                <option value="floor">Floor</option>
-              </select>
+          <div className="flex-1 hidden md:flex max-w-2xl mx-auto px-4 xl:px-8">
+            <div className="flex w-full h-[40px] rounded-[12px] overflow-hidden">
+              {/* Custom Category Dropdown */}
+              <div className="relative h-full flex-shrink-0 group z-50">
+                <div className="h-full bg-[#186675] text-white text-[14px] pl-5 pr-8 flex items-center cursor-pointer">
+                  {searchCategory}
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-white">
+                    <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                  </div>
+                </div>
+                
+                {/* Dropdown Menu */}
+                <div className="absolute top-full left-0 pt-[8px] w-[180px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                  <div className="bg-[#186675] shadow-xl relative rounded-sm">
+                    {/* Triangle Pointer */}
+                    <div className="absolute -top-[6px] left-6 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-[#186675]"></div>
+                    
+                    <ul className="py-2">
+                      {["All", "Blind", "Floor Item", "Glass Paper", "Kitchen Item", "Others Feature", "Wall Panel", "Wallpaper"].map(cat => (
+                        <li key={cat}>
+                          <button
+                            type="button"
+                            onClick={() => setSearchCategory(cat)}
+                            className="w-full text-left px-5 py-2.5 text-[14px] text-white hover:bg-[#155a68] transition-colors"
+                          >
+                            {cat}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Input */}
               <input
                 id="search-bar-input"
                 type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search here..."
-                className="flex-1 px-4 py-2.5 text-sm outline-none bg-white text-[var(--foreground)] placeholder:text-[#999]"
+                className="flex-1 h-full px-5 text-[14px] outline-none bg-[#f4f6f8] text-[#333] placeholder:text-[#666]"
               />
+              
+              {/* Submit Button */}
               <button
                 id="search-submit-btn"
                 type="submit"
-                className="bg-[var(--primary)] text-white px-5 hover:bg-[var(--primary-dark)] transition-colors"
+                className="h-full bg-[#186675] text-white px-6 hover:bg-[#13525e] transition-colors flex items-center justify-center"
                 aria-label="Search"
               >
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+                  <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
                 </svg>
               </button>
             </div>
@@ -226,7 +268,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                       link.isOffer
                         ? "text-[#e11b22]"
                         : isActive
-                          ? "text-[#e11b22]"
+                          ? "text-[#186675]"
                           : "text-[#333333] group-hover:text-[var(--primary)]"
                     )}
                   >
