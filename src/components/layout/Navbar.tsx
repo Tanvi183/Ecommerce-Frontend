@@ -1,5 +1,7 @@
 "use client";
 
+import { useCartStore } from "@/store/useCartStore";
+import { useWishlistStore } from "@/store/useWishlistStore";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -29,27 +31,62 @@ const NAV_LINKS = [
       { label: "Textured Wallpaper", href: "/category/textured-wallpaper" }
     ]
   },
-  { label: "FLOOR ITEM",    href: ROUTES.floorItem },
+  { 
+    label: "FLOOR ITEM",    
+    href: ROUTES.floorItem,
+    subLinks: [
+      { label: "Artificial Grass", href: "/category/artificial-grass" },
+      { label: "Decking Floor", href: "/category/decking-floor" },
+      { label: "Floor Carpet", href: "/category/floor-carpet" },
+      { label: "Pvc Coil Mats", href: "/category/pvc-coil-mats" },
+      { label: "PVC Floor", href: "/category/pvc-floor" },
+      { label: "PVC Floor Mats", href: "/category/pvc-floor-mats" },
+      { label: "Pvc Vinyl floor mat", href: "/category/pvc-vinyl-floor-mat" },
+      { label: "SPC Flooring", href: "/category/spc-flooring" },
+      { label: "Wooden Floor", href: "/category/wooden-floor" }
+    ]
+  },
   { label: "BLIND",         href: ROUTES.blind },
   { label: "OFFER",         href: ROUTES.offers, isOffer: true },
   { label: "GLASS PAPER",   href: ROUTES.glassPaper },
-  { label: "WALL PANEL",    href: ROUTES.wallPanel },
+  { 
+    label: "WALL PANEL",    
+    href: ROUTES.wallPanel,
+    subLinks: [
+      { label: "3D Wall Panel", href: "/category/3d-wall-panel" },
+      { label: "Acoustic Panel", href: "/category/acoustic-panel" },
+      { label: "Charcoal Louver Panel", href: "/category/charcoal-louver-panel" },
+      { label: "PU Stone Wall Panels", href: "/category/pu-stone-wall-panels" },
+      { label: "WPC", href: "/category/wpc" }
+    ]
+  },
   { label: "KITCHEN ITEM",  href: ROUTES.kitchenItem },
   { label: "ABOUT",         href: ROUTES.about },
   { label: "CONTACT",       href: ROUTES.contact },
 ];
 
 interface NavbarProps {
-  cartCount?: number;
-  totalPrice?: number;
-  wishlistCount?: number;
   onCartOpen?: () => void;
   onMobileNavOpen?: () => void;
 }
 
-export default function Navbar({ cartCount = 0, totalPrice = 0, wishlistCount = 0, onCartOpen, onMobileNavOpen }: NavbarProps) {
+export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
   const [search, setSearch] = useState("");
   const pathname = usePathname();
+  
+  // Hydration-safe store reads
+  const [isMounted, setIsMounted] = useState(false);
+  const cartTotalItems = useCartStore((state) => state.totalItems);
+  const cartTotalPrice = useCartStore((state) => state.totalPrice);
+  const wishlistItems = useWishlistStore((state) => state.items);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const cartCount = isMounted ? cartTotalItems : 0;
+  const totalPrice = isMounted ? cartTotalPrice : 0;
+  const wishlistCount = isMounted ? wishlistItems.length : 0;
 
   return (
     <header id="main-navbar" className="w-full bg-[var(--background)] border-b border-[var(--border)]">
@@ -109,32 +146,56 @@ export default function Navbar({ cartCount = 0, totalPrice = 0, wishlistCount = 
 
             {/* Wishlist */}
             <Link href={ROUTES.wishlist} className="hidden lg:flex items-center gap-2 group">
-              <div className="relative">
-                <svg width="24" height="24" fill="none" stroke="#666" strokeWidth="1.5" viewBox="0 0 24 24" className="group-hover:stroke-[var(--primary)] transition-colors">
+              <div className="relative flex items-center mt-1">
+                <svg width="26" height="26" fill="none" stroke="#186675" strokeWidth="1.5" viewBox="0 0 24 24" className="group-hover:stroke-[var(--primary)] transition-colors">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
-                {wishlistCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-[var(--destructive)] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                    {wishlistCount}
-                  </span>
-                )}
+                {/* Overlapping Badge (Always visible, even at 0) */}
+                <span className="absolute -top-1 -right-2 bg-[#e11b22] text-white text-[10px] font-bold min-w-[16px] h-[16px] px-1 rounded-full flex items-center justify-center leading-none border border-white">
+                  {wishlistCount}
+                </span>
               </div>
-              <div>
-                <div className="text-sm font-bold text-[var(--foreground)] leading-tight group-hover:text-[var(--primary)] transition-colors">Wishlist</div>
+              <div className="ml-2">
+                <div className="text-sm font-bold text-[#186675] leading-tight group-hover:text-[var(--primary)] transition-colors">Wishlist</div>
                 <div className="text-[11px] text-[#666]">Edit Your Wishlist</div>
               </div>
             </Link>
 
             {/* Account */}
-            <Link href={ROUTES.login} className="hidden lg:flex items-center gap-2 group">
-              <svg width="24" height="24" fill="none" stroke="#666" strokeWidth="1.5" viewBox="0 0 24 24" className="group-hover:stroke-[var(--primary)] transition-colors">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
-              </svg>
-              <div>
-                <div className="text-sm font-bold text-[var(--foreground)] leading-tight group-hover:text-[var(--primary)] transition-colors">Account</div>
+            <div className="hidden lg:flex items-center gap-2 group relative cursor-pointer">
+              {/* Account Icon with Arrow */}
+              <div className="relative text-[#186675] group-hover:text-[var(--primary)] transition-colors">
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+                </svg>
+                {/* Arrow Icon embedded */}
+                <div className="absolute -bottom-1 -right-2 bg-white rounded-full p-[2px]">
+                  <svg width="14" height="14" fill="none" stroke="#186675" strokeWidth="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" /><path d="M8 12h8" /><path d="m12 8 4 4-4 4" />
+                  </svg>
+                </div>
+              </div>
+              <div className="ml-2">
+                <div className="text-sm font-bold text-[#186675] leading-tight group-hover:text-[var(--primary)] transition-colors">Account</div>
                 <div className="text-[11px] text-[#666]">Login / Register</div>
               </div>
-            </Link>
+
+              {/* Hover Dropdown */}
+              <div className="absolute top-full right-0 mt-2 w-[160px] bg-[#186675] text-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 rounded shadow-lg before:content-[''] before:absolute before:-top-2 before:right-6 before:border-4 before:border-transparent before:border-b-[#186675]">
+                <Link href={ROUTES.login} className="flex items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors border-b border-[#217584]">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" /><path d="M8 12h8" /><path d="m12 8 4 4-4 4" />
+                  </svg>
+                  <span className="font-bold text-[13px]">Login</span>
+                </Link>
+                <Link href={ROUTES.register} className="flex items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" /><path d="M12 8v8" /><path d="M8 12h8" />
+                  </svg>
+                  <span className="font-bold text-[13px]">Register</span>
+                </Link>
+              </div>
+            </div>
 
             {/* Hamburger for mobile */}
             <button onClick={onMobileNavOpen} className="lg:hidden p-2 text-[#666]">

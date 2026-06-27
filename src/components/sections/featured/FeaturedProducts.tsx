@@ -16,7 +16,6 @@ const TABS: { id: TabKey; label: string }[] = [
 
 export default function FeaturedProducts() {
   const [activeTab, setActiveTab] = useState<TabKey>("latest");
-  const [wishlist, setWishlist] = useState<string[]>([]);
 
   // Filter dummy products based on active tab
   const filteredProducts = dummyProducts.filter(p => {
@@ -26,16 +25,6 @@ export default function FeaturedProducts() {
     if (activeTab === "bestsellers") return p.isBestSeller;
     return true;
   }).slice(0, 8); // showing 8 items max for grid
-
-  const handleAddToCart = (product: any) => {
-    console.log("Add to cart", product);
-  };
-
-  const handleToggleWishlist = (id: string) => {
-    setWishlist(prev =>
-      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
-    );
-  };
 
   return (
     <section className="py-12 bg-white">
@@ -66,9 +55,6 @@ export default function FeaturedProducts() {
             <ProductCard
               key={product.id}
               product={product}
-              isWishlisted={wishlist.includes(product.id)}
-              onAddToCart={handleAddToCart}
-              onToggleWishlist={handleToggleWishlist}
             />
           ))}
         </div>

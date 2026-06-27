@@ -5,17 +5,49 @@ import Link from "next/link";
 import { cn, formatPrice } from "@/lib/utils";
 import { ROUTES } from "@/constants/routes";
 import type { Product } from "@/types";
+import { useCartStore } from "@/store/useCartStore";
+import { useWishlistStore } from "@/store/useWishlistStore";
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import CartToast from "@/components/common/CartToast";
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart?: (product: Product) => void;
-  onToggleWishlist?: (id: string) => void;
-  isWishlisted?: boolean;
   className?: string;
   viewMode?: "grid" | "list";
 }
 
-export default function ProductCard({ product, onAddToCart, onToggleWishlist, isWishlisted, className, viewMode = "grid" }: ProductCardProps) {
+export default function ProductCard({ product, className, viewMode = "grid" }: ProductCardProps) {
+  const addToCart = useCartStore((state) => state.addToCart);
+  const toggleWishlist = useWishlistStore((state) => state.toggleWishlist);
+  const wishlistItems = useWishlistStore((state) => state.items);
+  
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const isWishlisted = isMounted ? wishlistItems.some((item) => item.id === product.id) : false;
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    toast.custom((t) => (
+      <CartToast product={product} toastId={t} />
+    ), { 
+      duration: 5000,
+      position: 'top-right'
+    });
+  };
+
+  const handleToggleWishlist = () => {
+    toggleWishlist(product);
+    if (isWishlisted) {
+      toast.info(`${product.name} removed from wishlist.`);
+    } else {
+      toast.success(`${product.name} added to wishlist!`);
+    }
+  };
+
   if (viewMode === "list") {
     return (
       <div className={cn("bg-white border border-[#e5e5e5] flex flex-col sm:flex-row h-full group hover:border-[#186675] transition-colors", className)}>
@@ -61,7 +93,7 @@ export default function ProductCard({ product, onAddToCart, onToggleWishlist, is
           {/* Action Buttons */}
           <div className="flex gap-2">
             <button
-              onClick={() => onAddToCart?.(product)}
+              onClick={handleAddToCart}
               className="bg-[#277b8c] text-white hover:bg-[#186675] transition-colors px-6 py-2.5 text-[12px] font-bold uppercase flex items-center gap-2"
             >
               <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -70,11 +102,11 @@ export default function ProductCard({ product, onAddToCart, onToggleWishlist, is
               Add to Cart
             </button>
             <button
-              onClick={() => onToggleWishlist?.(product.id)}
+              onClick={handleToggleWishlist}
               className="bg-[#e9ecef] text-[#333] hover:bg-[#dddddd] transition-colors px-4 py-2.5 flex items-center justify-center"
               title="Add to Wish List"
             >
-              <svg width="14" height="14" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg width="14" height="14" fill={isWishlisted ? "currentColor" : "none"} stroke={isWishlisted ? "var(--primary)" : "currentColor"} strokeWidth="2" viewBox="0 0 24 24">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
               </svg>
             </button>
@@ -132,7 +164,7 @@ export default function ProductCard({ product, onAddToCart, onToggleWishlist, is
       {/* Bottom Bar (Add to cart & Wishlist) */}
       <div className="flex text-white mt-auto">
         <button
-          onClick={() => onAddToCart?.(product)}
+          onClick={handleAddToCart}
           className="flex-1 flex justify-center items-center gap-2 px-3 py-2 text-xs font-bold bg-[#277b8c] hover:bg-[#186675] transition-colors"
         >
           <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -141,8 +173,8 @@ export default function ProductCard({ product, onAddToCart, onToggleWishlist, is
           Add To Cart
         </button>
         <button
-          onClick={() => onToggleWishlist?.(product.id)}
-          className="px-3 py-2 border-l border-white/20 hover:bg-[var(--primary-dark)] transition-colors flex items-center justify-center"
+          onClick={handleToggleWishlist}
+          className="px-3 py-2 border-l border-white/20 bg-[#277b8c] hover:bg-[var(--primary-dark)] transition-colors flex items-center justify-center"
           aria-label="Toggle Wishlist"
         >
           <svg width="14" height="14" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

@@ -5,6 +5,7 @@ import Providers from "@/providers/Providers";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import WhatsAppWidget from "@/components/common/WhatsAppWidget";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({
@@ -50,6 +51,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <WhatsAppWidget />
         </Providers>
       </body>
     </html>
