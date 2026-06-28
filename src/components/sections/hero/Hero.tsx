@@ -5,9 +5,9 @@ import Image from "next/image";
 import Container from "@/components/common/Container";
 
 const SLIDES = [
-  "/wallpaper_category.png",
-  "/floor_category.png",
-  "/kitchen_category.png"
+  "/hero_1.png",
+  "/hero_2.png",
+  "/hero_3.png"
 ];
 
 export default function Hero() {

@@ -230,7 +230,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
               </Link>
 
               {/* Hover Dropdown */}
-              <div className="absolute top-full right-0 mt-2 w-[160px] bg-[#186675] text-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 rounded shadow-lg before:content-[''] before:absolute before:-top-2 before:right-6 before:border-4 before:border-transparent before:border-b-[#186675]">
+              <div className="absolute top-full right-0 mt-2 w-[160px] bg-[#186675] text-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 rounded shadow-lg before:content-[''] before:absolute before:-top-2 before:right-6 before:border-4 before:border-transparent before:border-b-[#186675] after:content-[''] after:absolute after:-top-3 after:left-0 after:w-full after:h-3">
                 <Link href={ROUTES.login} className="flex items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors border-b border-[#217584]">
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="10" /><path d="M8 12h8" /><path d="m12 8 4 4-4 4" />
