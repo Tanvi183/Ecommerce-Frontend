@@ -12,72 +12,72 @@ import { ROUTES } from "@/constants/routes";
 import { cn, formatPrice } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { label: "ALL PRODUCTS",  href: ROUTES.products },
-  { 
-    label: "WALLPAPER",     
+  { label: "ALL PRODUCTS", href: ROUTES.products },
+  {
+    label: "WALLPAPER",
     href: ROUTES.wallpaper,
     subLinks: [
-      { label: "3D Wallpaper", href: "/category/3d-wallpaper" },
-      { label: "Brick Wallpaper", href: "/category/brick-wallpaper" },
-      { label: "Colour Bank Tesla", href: "/category/colour-bank-tesla" },
-      { label: "European wallpaper", href: "/category/european-wallpaper" },
-      { label: "Floral Wallpaper", href: "/category/floral-wallpaper" },
-      { label: "Foam Wallpaper", href: "/category/foam-wallpaper" },
-      { label: "Geometric Wallpaper", href: "/category/geometric-wallpaper" },
-      { label: "Korean Wallpaper", href: "/category/korean-wallpaper" },
-      { label: "PVC Wallpaper", href: "/category/pvc-wallpaper" },
-      { label: "Stone Wallpaper", href: "/category/stone-wallpaper" },
-      { label: "Textured Wallpaper", href: "/category/textured-wallpaper" },
-      { label: "Vinyl Wallpaper", href: "/category/vinyl-wallpaper" },
-      { label: "Wooden Wallpaper", href: "/category/wooden-wallpaper" }
+      { label: "3D Wallpaper", href: "/categories/3d-wallpaper" },
+      { label: "Brick Wallpaper", href: "/categories/brick-wallpaper" },
+      { label: "Colour Bank Tesla", href: "/categories/colour-bank-tesla" },
+      { label: "European wallpaper", href: "/categories/european-wallpaper" },
+      { label: "Floral Wallpaper", href: "/categories/floral-wallpaper" },
+      { label: "Foam Wallpaper", href: "/categories/foam-wallpaper" },
+      { label: "Geometric Wallpaper", href: "/categories/geometric-wallpaper" },
+      { label: "Korean Wallpaper", href: "/categories/korean-wallpaper" },
+      { label: "PVC Wallpaper", href: "/categories/pvc-wallpaper" },
+      { label: "Stone Wallpaper", href: "/categories/stone-wallpaper" },
+      { label: "Textured Wallpaper", href: "/categories/textured-wallpaper" },
+      { label: "Vinyl Wallpaper", href: "/categories/vinyl-wallpaper" },
+      { label: "Wooden Wallpaper", href: "/categories/wooden-wallpaper" }
     ]
   },
-  { 
-    label: "FLOOR ITEM",    
+  {
+    label: "FLOOR ITEM",
     href: ROUTES.floorItem,
     subLinks: [
-      { label: "Artificial Grass", href: "/category/artificial-grass" },
-      { label: "Decking Floor", href: "/category/decking-floor" },
-      { label: "Floor Carpet", href: "/category/floor-carpet" },
-      { label: "Floor Mat", href: "/category/floor-mat" },
-      { label: "Floor Runner", href: "/category/floor-runner" },
-      { label: "Rubber Floor", href: "/category/rubber-floor" },
-      { label: "SPC Floor", href: "/category/spc-floor" },
-      { label: "Vinyl Floor", href: "/category/vinyl-floor" }
+      { label: "Artificial Grass", href: "/categories/artificial-grass" },
+      { label: "Decking Floor", href: "/categories/decking-floor" },
+      { label: "Floor Carpet", href: "/categories/floor-carpet" },
+      { label: "Floor Mat", href: "/categories/floor-mat" },
+      { label: "Floor Runner", href: "/categories/floor-runner" },
+      { label: "Rubber Floor", href: "/categories/rubber-floor" },
+      { label: "SPC Floor", href: "/categories/spc-floor" },
+      { label: "Vinyl Floor", href: "/categories/vinyl-floor" }
     ]
   },
-  { label: "BLIND",         href: ROUTES.blind },
-  { label: "OFFER",         href: ROUTES.offers, isOffer: true },
-  { label: "GLASS PAPER",   href: ROUTES.glassPaper },
-  { 
-    label: "WALL PANEL",    
+  { label: "BLIND", href: ROUTES.blind },
+  { label: "OFFER", href: ROUTES.offers, isOffer: true },
+  { label: "GLASS PAPER", href: ROUTES.glassPaper },
+  {
+    label: "WALL PANEL",
     href: ROUTES.wallPanel,
     subLinks: [
-      { label: "Acoustic Panel", href: "/category/acoustic-panel" },
-      { label: "Charcoal Louver Panel", href: "/category/charcoal-louver-panel" },
-      { label: "PU Stone Wall Panels", href: "/category/pu-stone-wall-panels" },
-      { label: "WPC", href: "/category/wpc" }
+      { label: "Acoustic Panel", href: "/categories/acoustic-panel" },
+      { label: "Charcoal Louver Panel", href: "/categories/charcoal-louver-panel" },
+      { label: "PU Stone Wall Panels", href: "/categories/pu-stone-wall-panels" },
+      { label: "WPC", href: "/categories/wpc" }
     ]
   },
-  { label: "KITCHEN ITEM",    href: ROUTES.kitchenItem },
-  { 
-    label: "OTHERS FEATURE",  
+  { label: "KITCHEN ITEM", href: ROUTES.kitchenItem },
+  {
+    label: "OTHERS FEATURE",
     href: "/others-feature",
     subLinks: [
-      { label: "Artifical Plant", href: "/category/artifical-plant" },
-      { label: "Flexible Soft Stone", href: "/category/flexible-soft-stone" },
-      { label: "Glass Workshop", href: "/category/glass-workshop" },
-      { label: "Metal Workshop", href: "/category/metal-workshop" },
-      { label: "Service", href: "/category/service" },
-      { label: "Steel Strips", href: "/category/steel-strips" },
-      { label: "Table Cover Protector", href: "/category/table-cover-protector" },
-      { label: "Wall Moulding", href: "/category/wall-moulding" },
-      { label: "Wall Shelf", href: "/category/wall-shelf" },
-      { label: "Water Fountain", href: "/category/water-fountain" }
+      { label: "Artifical Plant", href: "/categories/artifical-plant" },
+      { label: "Flexible Soft Stone", href: "/categories/flexible-soft-stone" },
+      { label: "Glass Workshop", href: "/categories/glass-workshop" },
+      { label: "Metal Workshop", href: "/categories/metal-workshop" },
+      { label: "Service", href: "/categories/service" },
+      { label: "Steel Strips", href: "/categories/steel-strips" },
+      { label: "Table Cover Protector", href: "/categories/table-cover-protector" },
+      { label: "Wall Moulding", href: "/categories/wall-moulding" },
+      { label: "Wall Shelf", href: "/categories/wall-shelf" },
+      { label: "Water Fountain", href: "/categories/water-fountain" }
     ]
   },
-  { label: "ABOUT",           href: ROUTES.about },
-  { label: "CONTACT",         href: ROUTES.contact },
+  { label: "ABOUT", href: ROUTES.about },
+  { label: "CONTACT", href: ROUTES.contact },
 ];
 
 interface NavbarProps {
@@ -89,7 +89,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
   const [search, setSearch] = useState("");
   const [searchCategory, setSearchCategory] = useState("All");
   const pathname = usePathname();
-  
+
   // Hydration-safe store reads
   const [isMounted, setIsMounted] = useState(false);
   const cartTotalItems = useCartStore((state) => state.totalItems);
@@ -125,16 +125,16 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                 <div className="h-full bg-[#186675] text-white text-[14px] pl-5 pr-8 flex items-center cursor-pointer">
                   {searchCategory}
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 text-white">
-                    <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z" /></svg>
                   </div>
                 </div>
-                
+
                 {/* Dropdown Menu */}
                 <div className="absolute top-full left-0 pt-[8px] w-[180px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                   <div className="bg-[#186675] shadow-xl relative rounded-sm">
                     {/* Triangle Pointer */}
                     <div className="absolute -top-[6px] left-6 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-[#186675]"></div>
-                    
+
                     <ul className="py-2">
                       {["All", "Blind", "Floor Item", "Glass Paper", "Kitchen Item", "Others Feature", "Wall Panel", "Wallpaper"].map(cat => (
                         <li key={cat}>
@@ -151,7 +151,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                   </div>
                 </div>
               </div>
-              
+
               {/* Input */}
               <input
                 id="search-bar-input"
@@ -161,7 +161,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                 placeholder="Search here..."
                 className="flex-1 h-full px-5 text-[14px] outline-none bg-[#f4f6f8] text-[#333] placeholder:text-[#666]"
               />
-              
+
               {/* Submit Button */}
               <button
                 id="search-submit-btn"
@@ -180,12 +180,16 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
           <div className="flex items-center gap-6">
             {/* Call */}
             <div className="hidden lg:flex items-center gap-2">
-              <svg width="24" height="24" fill="none" stroke="#666" strokeWidth="1.5" viewBox="0 0 24 24">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z" />
-              </svg>
-              <div>
-                <div className="text-sm font-bold text-[var(--foreground)] leading-tight">Call Us</div>
-                <div className="text-[11px] text-[#666]">01815-407531</div>
+              <div className="text-[#186675]">
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  <path d="M14.05 2a9 9 0 0 1 8 7.94" />
+                  <path d="M14.05 6A5 5 0 0 1 18 10" />
+                </svg>
+              </div>
+              <div className="flex flex-col justify-center">
+                <div className="text-[15px] font-bold text-[#186675] leading-none mb-1">Call Us</div>
+                <div className="text-[13px] text-[#186675] leading-none">01815-407531</div>
               </div>
             </div>
 
@@ -209,7 +213,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
             {/* Account */}
             <div className="hidden lg:flex items-center gap-2 group relative cursor-pointer">
               {/* Account Icon with Arrow */}
-              <div className="relative text-[#186675] group-hover:text-[var(--primary)] transition-colors">
+              <Link href={ROUTES.login} className="relative text-[#186675] group-hover:text-[var(--primary)] transition-colors">
                 <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                 </svg>
@@ -219,11 +223,11 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                     <circle cx="12" cy="12" r="10" /><path d="M8 12h8" /><path d="m12 8 4 4-4 4" />
                   </svg>
                 </div>
-              </div>
-              <div className="ml-2">
+              </Link>
+              <Link href={ROUTES.login} className="ml-2 block">
                 <div className="text-sm font-bold text-[#186675] leading-tight group-hover:text-[var(--primary)] transition-colors">Account</div>
                 <div className="text-[11px] text-[#666]">Login / Register</div>
-              </div>
+              </Link>
 
               {/* Hover Dropdown */}
               <div className="absolute top-full right-0 mt-2 w-[160px] bg-[#186675] text-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 rounded shadow-lg before:content-[''] before:absolute before:-top-2 before:right-6 before:border-4 before:border-transparent before:border-b-[#186675]">
@@ -255,8 +259,9 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
       {/* ── Nav links row ── */}
       <div className="hidden lg:block bg-white border-t border-b border-[#e5e5e5] relative">
         <Container className="flex justify-between items-center relative h-[50px]">
+
           {/* Main Links */}
-          <nav className="flex items-center h-full">
+          <nav className="flex-1 flex justify-between items-center h-full pr-6">
             {NAV_LINKS.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -264,7 +269,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                   <Link
                     href={link.href}
                     className={cn(
-                      "px-2 xl:px-3 text-[12px] font-sans font-bold transition-colors flex items-center h-full",
+                      "px-2 xl:px-3 text-[12px] font-sans font-bold transition-colors flex items-center h-full whitespace-nowrap",
                       link.isOffer
                         ? "text-[#e11b22]"
                         : isActive
@@ -281,11 +286,11 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                       {/* Triangle Pointer */}
                       <div className="absolute -top-2 left-6 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-[#e5e5e5]"></div>
                       <div className="absolute -top-[7px] left-6 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-white"></div>
-                      
+
                       <ul className="py-2">
                         {link.subLinks.map(sub => (
                           <li key={sub.href}>
-                            <Link 
+                            <Link
                               href={sub.href}
                               className="block px-5 py-2.5 text-[14px] text-[#004f7b] hover:text-[#277b8c] hover:bg-[#f8f9fa] transition-colors"
                             >
@@ -302,13 +307,13 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
           </nav>
 
           {/* Cart Block */}
-          <div className="flex items-center h-[50px] my-auto ml-2 pl-4 border-l border-[#e5e5e5] relative group cursor-pointer">
-            <div className="px-4 h-full flex items-center justify-center">
+          <div className="flex items-center h-[50px] my-auto pl-4 border-l border-[#e5e5e5] relative group cursor-pointer">
+            <div className="pr-4 h-full flex items-center justify-center">
               <span className="text-[14px] font-normal text-[#333]">
                 {cartCount} item(s) - {formatPrice(totalPrice)}
               </span>
             </div>
-            <Link 
+            <Link
               href={ROUTES.cart}
               className="bg-[#277b8c] hover:bg-[#186675] text-white h-[50px] px-4 flex items-center justify-center transition-colors relative"
             >
@@ -323,7 +328,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
             </Link>
 
             {/* Cart Dropdown */}
-            <div className="absolute top-full right-0 mt-0 w-[350px] bg-[#f8f9fa] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-[#e5e5e5] before:content-[''] before:absolute before:-top-[8px] before:right-6 before:border-[8px] before:border-transparent before:border-b-[#f8f9fa]">
+            <div className="absolute top-full left-0 mt-0 w-[350px] bg-[#f8f9fa] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-[#e5e5e5] before:content-[''] before:absolute before:-top-[8px] before:left-24 before:border-[8px] before:border-transparent before:border-b-[#f8f9fa]">
               {cartCount === 0 ? (
                 <div className="p-6 text-center text-[13px] text-[#666]">
                   Your shopping cart is empty!
@@ -344,7 +349,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                         </div>
                         <div className="text-[13px] text-[#333]">x {item.quantity}</div>
                         <div className="text-[13px] font-bold text-[#333] w-[60px] text-right">{formatPrice(item.price)}</div>
-                        <button 
+                        <button
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -352,12 +357,12 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                           }}
                           className="text-[#d9534f] hover:text-[#c9302c] transition-colors p-1"
                         >
-                          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
                         </button>
                       </div>
                     ))}
                   </div>
-                  
+
                   {/* Totals */}
                   <div className="p-3 bg-[#f8f9fa] border-b border-[#e5e5e5]">
                     <div className="flex justify-end gap-6 mb-2 text-[13px]">
@@ -372,7 +377,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
 
                   {/* Buttons */}
                   <div className="p-3 bg-[#e9ecef] flex gap-2">
-                    <Link 
+                    <Link
                       href={ROUTES.cart}
                       className="flex-1 bg-[#186675] text-white py-2 flex items-center justify-center gap-2 hover:bg-[#13525e] transition-colors text-[13px] font-bold"
                     >
@@ -381,13 +386,13 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                       </svg>
                       View Cart
                     </Link>
-                    <Link 
+                    <Link
                       href={ROUTES.checkout}
                       className="flex-1 bg-[#186675] text-white py-2 flex items-center justify-center gap-2 hover:bg-[#13525e] transition-colors text-[13px] font-bold"
                     >
                       Checkout
                       <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                        <path d="M5 12h14M12 5l7 7-7 7" />
                       </svg>
                     </Link>
                   </div>
@@ -395,6 +400,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
               )}
             </div>
           </div>
+
         </Container>
       </div>
     </header>
