@@ -74,9 +74,12 @@ export default function Hero() {
       {/* Grey Information Bar underneath */}
       <div className="bg-[#e2e6e9] py-3 border-b border-[#cccccc] overflow-hidden">
         <Container>
-          <marquee className="text-[#333333] text-[13px] font-bold block w-full">
-            If anyone is interested to see sample book, we send sample book with a skillful person for measurement. For appointment Call: 01815-407531
-          </marquee>
+          <div className="overflow-hidden w-full">
+            <div className="animate-marquee whitespace-nowrap text-[#333333] text-[13px] font-bold inline-block">
+              If anyone is interested to see sample book, we send sample book with a skillful person for measurement. For appointment Call: 01815-407531
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If anyone is interested to see sample book, we send sample book with a skillful person for measurement. For appointment Call: 01815-407531
+            </div>
+          </div>
         </Container>
       </div>
     </section>

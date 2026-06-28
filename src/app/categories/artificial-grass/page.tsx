@@ -48,7 +48,7 @@ export default function ArtificialGrassPage() {
             </p>
           </div>
 
-          <ProductToolbar />
+          <ProductToolbar total={15} />
           <div className="mt-6">
             <ProductGrid />
           </div>

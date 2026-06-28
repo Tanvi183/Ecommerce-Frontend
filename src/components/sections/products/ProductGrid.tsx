@@ -1,10 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/cards/ProductCard";
 import { dummyProducts } from "@/constants/dummyProducts";
 
-export default function ProductGrid() {
+function ProductGridInner() {
   const searchParams = useSearchParams();
   const viewMode = searchParams.get("view") || "grid";
   
@@ -33,5 +34,13 @@ export default function ProductGrid() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function ProductGrid() {
+  return (
+    <Suspense fallback={<div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-h-[300px]" />}>
+      <ProductGridInner />
+    </Suspense>
   );
 }

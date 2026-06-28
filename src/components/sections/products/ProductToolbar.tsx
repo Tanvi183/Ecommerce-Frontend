@@ -1,12 +1,13 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 interface ProductToolbarProps {
   total: number;
 }
 
-export default function ProductToolbar({ total }: ProductToolbarProps) {
+function ProductToolbarInner({ total }: ProductToolbarProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -67,5 +68,13 @@ export default function ProductToolbar({ total }: ProductToolbarProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductToolbar({ total }: ProductToolbarProps) {
+  return (
+    <Suspense fallback={<div className="bg-[#f8f8f8] border border-[#dddddd] p-3 mb-6 h-[52px]" />}>
+      <ProductToolbarInner total={total} />
+    </Suspense>
   );
 }
