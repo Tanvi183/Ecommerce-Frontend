@@ -9,6 +9,7 @@ export const ROUTES = {
   orders: "/orders",
   orderDetail: (id: string) => `/orders/${id}`,
   wishlist: "/wishlist",
+  compare: "/compare",
   profile: "/profile",
   login: "/auth/login",
   register: "/auth/register",
