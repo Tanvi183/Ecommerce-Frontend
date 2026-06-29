@@ -2,6 +2,7 @@
 
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -97,6 +98,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
   const cartItemsStore = useCartStore((state) => state.items);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const wishlistItems = useWishlistStore((state) => state.items);
+  const { isAuthenticated, user, clearAuth } = useAuthStore();
 
   useEffect(() => {
     setIsMounted(true);
@@ -211,9 +213,9 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
             </Link>
 
             {/* Account */}
-            <div className="hidden lg:flex items-center gap-2 group relative cursor-pointer">
+            <div className="hidden lg:flex items-center gap-2 group relative cursor-pointer z-50">
               {/* Account Icon with Arrow */}
-              <Link href={ROUTES.login} className="relative text-[#186675] group-hover:text-[var(--primary)] transition-colors">
+              <Link href={isAuthenticated ? ROUTES.profile : ROUTES.login} className="relative text-[#186675] group-hover:text-[var(--primary)] transition-colors">
                 <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                 </svg>
@@ -224,25 +226,56 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                   </svg>
                 </div>
               </Link>
-              <Link href={ROUTES.login} className="ml-2 block">
-                <div className="text-sm font-bold text-[#186675] leading-tight group-hover:text-[var(--primary)] transition-colors">Account</div>
-                <div className="text-[11px] text-[#666]">Login / Register</div>
+              <Link href={isAuthenticated ? ROUTES.profile : ROUTES.login} className="ml-2 block">
+                <div className="text-sm font-bold text-[#186675] leading-tight group-hover:text-[var(--primary)] transition-colors">
+                  {isAuthenticated && user ? `Hi, ${user.name.split(' ')[0]}` : "Account"}
+                </div>
+                <div className="text-[11px] text-[#666]">
+                  {isAuthenticated ? "My Profile" : "Login / Register"}
+                </div>
               </Link>
 
               {/* Hover Dropdown */}
               <div className="absolute top-full right-0 mt-2 w-[160px] bg-[#186675] text-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 rounded shadow-lg before:content-[''] before:absolute before:-top-2 before:right-6 before:border-4 before:border-transparent before:border-b-[#186675] after:content-[''] after:absolute after:-top-3 after:left-0 after:w-full after:h-3">
-                <Link href={ROUTES.login} className="flex items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors border-b border-[#217584]">
-                  <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" /><path d="M8 12h8" /><path d="m12 8 4 4-4 4" />
-                  </svg>
-                  <span className="font-bold text-[13px]">Login</span>
-                </Link>
-                <Link href={ROUTES.register} className="flex items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors">
-                  <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" /><path d="M12 8v8" /><path d="M8 12h8" />
-                  </svg>
-                  <span className="font-bold text-[13px]">Register</span>
-                </Link>
+                {isAuthenticated ? (
+                  <>
+                    <Link href={ROUTES.profile} className="flex items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors border-b border-[#217584]">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+                      </svg>
+                      <span className="font-bold text-[13px]">My Profile</span>
+                    </Link>
+                    <button onClick={async () => {
+                        try {
+                          await import('@/lib/api').then(m => m.default.post('/auth/logout'));
+                        } catch(e) {}
+                        clearAuth();
+                        window.location.href = ROUTES.login;
+                      }} 
+                      className="flex w-full items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors"
+                    >
+                      <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
+                      </svg>
+                      <span className="font-bold text-[13px]">Logout</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link href={ROUTES.login} className="flex items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors border-b border-[#217584]">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" /><path d="M8 12h8" /><path d="m12 8 4 4-4 4" />
+                      </svg>
+                      <span className="font-bold text-[13px]">Login</span>
+                    </Link>
+                    <Link href={ROUTES.register} className="flex items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" /><path d="M12 8v8" /><path d="M8 12h8" />
+                      </svg>
+                      <span className="font-bold text-[13px]">Register</span>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
 

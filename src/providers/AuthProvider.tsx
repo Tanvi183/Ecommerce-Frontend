@@ -1,40 +1,37 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
-import type { User } from "@/types";
-
-interface AuthContextValue {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (user: User, token: string) => void;
-  logout: () => void;
-}
-
-const AuthContext = createContext<AuthContextValue>({
-  user: null, isAuthenticated: false, isLoading: false,
-  login: () => {}, logout: () => {},
-});
+import { useEffect, useState } from "react";
+import api from "@/lib/api";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
+  const { setAuth, clearAuth } = useAuthStore();
 
-  const login = (u: User, token: string) => {
-    setUser(u);
-    if (typeof window !== "undefined") localStorage.setItem("auth_token", token);
-  };
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        // Attempt silent refresh to get the Access Token using the HttpOnly cookie
+        const res = await api.post("/auth/refresh");
+        const { accessToken } = res.data;
 
-  const logout = () => {
-    setUser(null);
-    if (typeof window !== "undefined") localStorage.removeItem("auth_token");
-  };
+        // If successful, fetch the user profile
+        const userRes = await api.get("/auth/me", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
 
-  return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+        // Store user and token in memory
+        setAuth(userRes.data.data, accessToken);
+      } catch (error) {
+        // If refresh fails (no cookie, expired cookie, etc), ensure we are logged out
+        clearAuth();
+      } finally {
+        setIsInitializing(false);
+      }
+    };
+
+    initializeAuth();
+  }, [setAuth, clearAuth]);
+
+  return <>{children}</>;
 }
-
-export const useAuth = () => useContext(AuthContext);

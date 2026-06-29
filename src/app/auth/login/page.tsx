@@ -1,13 +1,40 @@
+"use client";
+
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import Container from "@/components/common/Container";
-
-export const metadata = {
-  title: "Account Login",
-  description: "Login to your account",
-};
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import api from "@/lib/api";
+import { useAuthStore } from "@/store/useAuthStore";
+import { toast } from "sonner";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const setAuth = useAuthStore(state => state.setAuth);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const res = await api.post("/auth/login", { email, password });
+      
+      if (res.data.success) {
+        setAuth(res.data.data, res.data.accessToken);
+        toast.success("Login successful!");
+        router.push(ROUTES.profile);
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Invalid email or password");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="bg-white pb-16">
       {/* Breadcrumbs */}
@@ -50,7 +77,7 @@ export default function LoginPage() {
             <div className="flex flex-col h-full">
               <h2 className="text-[16px] font-bold text-[#333] mb-4">Returning Customer</h2>
               
-              <form className="flex flex-col flex-1" action="#">
+              <form className="flex flex-col flex-1" onSubmit={handleSubmit}>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 mb-3">
                   <label htmlFor="email" className="w-[160px] flex-shrink-0 text-[14px] text-[#444]">
                     E Mail Address
@@ -59,6 +86,8 @@ export default function LoginPage() {
                     type="email" 
                     id="email" 
                     name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="E Mail Address" 
                     className="flex-1 border border-[#efefef] px-3 py-2 outline-none focus:border-[#2b7e8d] text-[14px] transition-colors bg-[#fdfdfd] placeholder:text-[#999]"
                     required
@@ -73,6 +102,8 @@ export default function LoginPage() {
                     type="password" 
                     id="password" 
                     name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password" 
                     className="flex-1 border border-[#efefef] px-3 py-2 outline-none focus:border-[#2b7e8d] text-[14px] transition-colors bg-[#fdfdfd] placeholder:text-[#999]"
                     required
@@ -89,9 +120,10 @@ export default function LoginPage() {
                 <div className="mt-auto">
                   <button 
                     type="submit"
-                    className="bg-[#2b7e8d] hover:bg-[#1e616e] text-white px-8 py-2.5 text-[14px] font-bold transition-colors w-full"
+                    disabled={isLoading}
+                    className="bg-[#2b7e8d] hover:bg-[#1e616e] text-white px-8 py-2.5 text-[14px] font-bold transition-colors w-full disabled:opacity-50"
                   >
-                    Login
+                    {isLoading ? "Logging in..." : "Login"}
                   </button>
                 </div>
               </form>
