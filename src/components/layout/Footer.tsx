@@ -1,8 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import Container from "@/components/common/Container";
 import { ROUTES } from "@/constants/routes";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname.startsWith('/admin')) return null;
+
   return (
     <footer className="bg-[var(--footer-bg)] text-[#cccccc] pt-12">
       <Container className="pb-12">

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function WhatsAppWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,9 @@ export default function WhatsAppWidget() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const pathname = usePathname();
+  if (pathname?.startsWith('/admin')) return null;
 
   return (
     <div ref={widgetRef} className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">

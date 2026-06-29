@@ -145,6 +145,10 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
   const totalPrice = isMounted ? cartTotalPrice : 0;
   const cartItems = isMounted ? cartItemsStore : [];
   const wishlistCount = isMounted ? wishlistItems.length : 0;
+  
+  const accountLinkRoute = isAuthenticated ? (user?.role === "ADMIN" ? "/admin" : ROUTES.profile) : ROUTES.login;
+
+  if (pathname.startsWith('/admin')) return null;
 
   return (
     <header id="main-navbar" className="w-full bg-[var(--background)] border-b border-[var(--border)]">
@@ -252,7 +256,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
             {/* Account */}
             <div className="hidden lg:flex items-center gap-2 group relative cursor-pointer z-50">
               {/* Account Icon with Arrow */}
-              <Link href={isAuthenticated ? ROUTES.profile : ROUTES.login} className="relative text-[#186675] group-hover:text-[var(--primary)] transition-colors">
+              <Link href={accountLinkRoute} className="relative text-[#186675] group-hover:text-[var(--primary)] transition-colors">
                 <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                 </svg>
@@ -263,7 +267,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                   </svg>
                 </div>
               </Link>
-              <Link href={isAuthenticated ? ROUTES.profile : ROUTES.login} className="ml-2 block">
+              <Link href={accountLinkRoute} className="ml-2 block">
                 <div className="text-sm font-bold text-[#186675] leading-tight group-hover:text-[var(--primary)] transition-colors">
                   {isAuthenticated && user ? `Hi, ${user.name.split(' ')[0]}` : "Account"}
                 </div>
@@ -276,11 +280,11 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
               <div className="absolute top-full right-0 mt-2 w-[160px] bg-[#186675] text-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 rounded shadow-lg before:content-[''] before:absolute before:-top-2 before:right-6 before:border-4 before:border-transparent before:border-b-[#186675] after:content-[''] after:absolute after:-top-3 after:left-0 after:w-full after:h-3">
                 {isAuthenticated ? (
                   <>
-                    <Link href={ROUTES.profile} className="flex items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors border-b border-[#217584]">
+                    <Link href={user?.role === "ADMIN" ? "/admin" : ROUTES.profile} className="flex items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors border-b border-[#217584]">
                       <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                       </svg>
-                      <span className="font-bold text-[13px]">My Profile</span>
+                      <span className="font-bold text-[13px]">{user?.role === "ADMIN" ? "Admin Dashboard" : "My Profile"}</span>
                     </Link>
                     <button onClick={handleLogout} 
                       className="flex w-full items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors cursor-pointer"
