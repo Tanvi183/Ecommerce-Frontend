@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import Container from "@/components/common/Container";
+import ProfileSidebar from "@/components/profile/ProfileSidebar";
 
 export default function ProfilePage() {
   const { isAuthenticated, user, clearAuth } = useAuthStore();
@@ -42,28 +43,7 @@ export default function ProfilePage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white border border-[#efefef] p-0 overflow-hidden">
-              <div className="bg-[#186675] px-5 py-3">
-                <h2 className="text-[14px] font-bold text-white uppercase tracking-wider">My Account</h2>
-              </div>
-              <nav className="flex flex-col text-[14px]">
-                <Link href={ROUTES.profile} className="px-5 py-3 border-b border-[#efefef] text-[#186675] font-bold bg-[#f0f7f8] hover:bg-[#e6f2f4] transition-colors">
-                  Account Dashboard
-                </Link>
-                <Link href={ROUTES.orders} className="px-5 py-3 border-b border-[#efefef] text-[#444] hover:text-[#186675] hover:bg-[#f8f9fa] transition-colors">
-                  Order History
-                </Link>
-                <Link href={ROUTES.wishlist} className="px-5 py-3 border-b border-[#efefef] text-[#444] hover:text-[#186675] hover:bg-[#f8f9fa] transition-colors">
-                  Wishlist
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="px-5 py-3 text-left text-[#d9534f] hover:bg-[#fff5f5] transition-colors font-bold"
-                >
-                  Logout
-                </button>
-              </nav>
-            </div>
+            <ProfileSidebar />
           </div>
 
           {/* Main Content */}

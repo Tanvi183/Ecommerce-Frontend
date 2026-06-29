@@ -11,7 +11,8 @@ import Container from "@/components/common/Container";
 import Logo from "@/components/common/Logo";
 import { ROUTES } from "@/constants/routes";
 import { cn, formatPrice } from "@/lib/utils";
-
+import Swal from "sweetalert2";
+import api from "@/lib/api";
 const NAV_LINKS = [
   { label: "ALL PRODUCTS", href: ROUTES.products },
   {
@@ -99,6 +100,42 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const wishlistItems = useWishlistStore((state) => state.items);
   const { isAuthenticated, user, clearAuth } = useAuthStore();
+
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: "Log out of your account?",
+      text: "You can always log back in at any time.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Log out",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+      background: "#ffffff",
+      color: "#333333",
+      backdrop: `
+        rgba(0,0,0,0.4)
+        backdrop-filter: blur(4px)
+      `,
+      customClass: {
+        popup: "rounded-2xl shadow-xl border border-gray-100",
+        title: "text-xl font-bold mt-2",
+        confirmButton: "bg-[#186675] hover:bg-[#13505c] text-white px-6 py-2.5 rounded-lg font-medium transition-colors border-0 ml-3",
+        cancelButton: "bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2.5 rounded-lg font-medium transition-colors border-0",
+        actions: "mt-6 space-x-3 w-full justify-end",
+      },
+      buttonsStyling: false,
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      await api.post("/auth/logout");
+      clearAuth();
+      window.location.href = ROUTES.login;
+    } catch (error) {
+      console.error("Failed to logout", error);
+    }
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -245,14 +282,8 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                       </svg>
                       <span className="font-bold text-[13px]">My Profile</span>
                     </Link>
-                    <button onClick={async () => {
-                        try {
-                          await import('@/lib/api').then(m => m.default.post('/auth/logout'));
-                        } catch(e) {}
-                        clearAuth();
-                        window.location.href = ROUTES.login;
-                      }} 
-                      className="flex w-full items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors"
+                    <button onClick={handleLogout} 
+                      className="flex w-full items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors cursor-pointer"
                     >
                       <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
