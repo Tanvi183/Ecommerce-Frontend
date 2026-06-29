@@ -26,7 +26,11 @@ export default function LoginPage() {
       if (res.data.success) {
         setAuth(res.data.data, res.data.accessToken);
         toast.success("Login successful!");
-        router.push(ROUTES.profile);
+        if (res.data.data.role === "ADMIN") {
+          router.push("/admin");
+        } else {
+          router.push(ROUTES.profile);
+        }
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Invalid email or password");
