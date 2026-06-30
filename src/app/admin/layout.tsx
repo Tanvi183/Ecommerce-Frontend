@@ -48,18 +48,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
 
   const appLinks = [
-    { name: "Ecommerce", path: "/admin/apps/ecommerce", icon: ShoppingCart },
-    { name: "Chat", path: "/admin/apps/chat", icon: MessageSquare },
-    { name: "Projects", path: "/admin/apps/projects", icon: Briefcase },
-    { name: "Tasks", path: "/admin/apps/tasks", icon: CheckSquare },
-    { name: "Invoice", path: "/admin/apps/invoice", icon: FileText },
-    { name: "CRM", path: "/admin/apps/crm", icon: HeartHandshake },
-    { name: "Users", path: "/admin/apps/users", icon: Users },
-    { name: "Finance", path: "/admin/apps/finance", icon: DollarSign },
-    { name: "HRM", path: "/admin/apps/hrm", icon: BriefcaseBusiness },
-    { name: "Email", path: "/admin/apps/email", icon: Mail, badge: "New" },
-    { name: "Support Center", path: "/admin/apps/support", icon: Headphones },
-    { name: "Promo", path: "/admin/apps/promo", icon: Tag },
+    { name: "Products", path: "/admin/products", icon: ShoppingCart },
+    { name: "Categories", path: "/admin/categories", icon: Grid },
+    { name: "Others Feature", path: "/admin/others-feature", icon: Globe },
+    { name: "Brands", path: "/admin/brands", icon: Tag },
+    { name: "Orders", path: "/admin/orders", icon: FileText },
+    { name: "Customers", path: "/admin/customers", icon: Users },
+    { name: "Low-Stock", path: "/admin/low-stock", icon: Activity, badge: "Alert" },
+    { name: "Reviews", path: "/admin/reviews", icon: MessageSquare },
   ];
 
   return (

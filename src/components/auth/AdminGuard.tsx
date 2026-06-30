@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { ROUTES } from "@/constants/routes";
 
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, isInitializing } = useAuthStore();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -15,16 +15,18 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
   }, []);
 
   useEffect(() => {
-    if (isMounted) {
+    // Only redirect if we are fully mounted AND authentication initialization has finished
+    if (isMounted && !isInitializing) {
       if (!isAuthenticated) {
         router.replace(ROUTES.login);
       } else if (user?.role !== "ADMIN") {
         router.replace("/");
       }
     }
-  }, [isMounted, isAuthenticated, user, router]);
+  }, [isMounted, isInitializing, isAuthenticated, user, router]);
 
-  if (!isMounted || !isAuthenticated || user?.role !== "ADMIN") {
+  // Show loading spinner if not mounted, still initializing, or not authenticated/admin
+  if (!isMounted || isInitializing || !isAuthenticated || user?.role !== "ADMIN") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">

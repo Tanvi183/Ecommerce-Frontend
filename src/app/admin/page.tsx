@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getAdminStats } from "@/lib/adminApi";
 import { 
   ComposedChart,
   RadialBarChart,
@@ -56,9 +57,21 @@ const radialData = [
 
 export default function AdminDashboard() {
   const [mounted, setMounted] = useState(false);
+  const [stats, setStats] = useState<any>(null);
 
   useEffect(() => {
     setMounted(true);
+    const fetchStats = async () => {
+      try {
+        const res = await getAdminStats();
+        if (res.data.success) {
+          setStats(res.data.data);
+        }
+      } catch (error) {
+        console.error("Failed to load stats", error);
+      }
+    };
+    fetchStats();
   }, []);
 
   if (!mounted) return null;
@@ -79,12 +92,12 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         {/* Card 1 */}
         <div className="bg-white p-5 rounded-lg shadow-sm flex flex-col items-center justify-center text-center border-t-2 border-transparent hover:border-[#186675] transition-colors">
-          <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Total Projects</p>
+          <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Total Orders</p>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded bg-[#f0f7f8] text-[#186675] flex items-center justify-center">
               <Briefcase size={20} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-800">6,847</h3>
+            <h3 className="text-2xl font-bold text-gray-800">{stats ? stats.totalOrders : '...'}</h3>
           </div>
           <p className="text-[12px] text-gray-400 font-medium">
             <span className="text-[#e11b22]">v 9.19%</span> Since last month
@@ -93,12 +106,12 @@ export default function AdminDashboard() {
 
         {/* Card 2 */}
         <div className="bg-white p-5 rounded-lg shadow-sm flex flex-col items-center justify-center text-center border-t-2 border-transparent hover:border-[#277b8c] transition-colors">
-          <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Total Tasks</p>
+          <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Total Products</p>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded bg-[#f3f9fa] text-[#277b8c] flex items-center justify-center">
               <CheckSquare size={20} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-800">9.60k</h3>
+            <h3 className="text-2xl font-bold text-gray-800">{stats ? stats.totalProducts : '...'}</h3>
           </div>
           <p className="text-[12px] text-gray-400 font-medium">
             <span className="text-[#2db742]">^ 26.87%</span> Since last month
@@ -107,12 +120,12 @@ export default function AdminDashboard() {
 
         {/* Card 3 */}
         <div className="bg-white p-5 rounded-lg shadow-sm flex flex-col items-center justify-center text-center border-t-2 border-transparent hover:border-[#e11b22] transition-colors">
-          <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Avg. Project Earnings</p>
+          <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Total Revenue</p>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded bg-[#fce8e9] text-[#e11b22] flex items-center justify-center">
               <DollarSign size={20} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-800">$98.24k</h3>
+            <h3 className="text-2xl font-bold text-gray-800">${stats ? stats.totalRevenue.toFixed(2) : '...'}</h3>
           </div>
           <p className="text-[12px] text-gray-400 font-medium">
             <span className="text-[#2db742]">^ 3.51%</span> Since last month
@@ -121,12 +134,12 @@ export default function AdminDashboard() {
 
         {/* Card 4 */}
         <div className="bg-white p-5 rounded-lg shadow-sm flex flex-col items-center justify-center text-center border-t-2 border-transparent hover:border-[#2db742] transition-colors">
-          <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Productivity</p>
+          <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Customers</p>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded bg-[#eaf8ec] text-[#2db742] flex items-center justify-center">
-              <Activity size={20} />
+              <Users size={20} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-800">87.84%</h3>
+            <h3 className="text-2xl font-bold text-gray-800">{stats ? stats.totalCustomers : '...'}</h3>
           </div>
           <p className="text-[12px] text-gray-400 font-medium">
             <span className="text-[#e11b22]">v 1.05%</span> Since last month
@@ -135,10 +148,10 @@ export default function AdminDashboard() {
 
         {/* Card 5 */}
         <div className="bg-white p-5 rounded-lg shadow-sm flex flex-col items-center justify-center text-center border-t-2 border-transparent hover:border-[#186675] transition-colors">
-          <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Today's Hours</p>
+          <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-3">Low Stock Alerts</p>
           <div className="flex items-center gap-2 mb-4 text-[#186675]">
-            <Clock size={20} />
-            <h3 className="text-2xl font-bold text-gray-800">05:30:57</h3>
+            <Activity size={20} />
+            <h3 className="text-2xl font-bold text-gray-800">{stats ? stats.lowStockCount : '...'}</h3>
           </div>
           <button className="w-full bg-[#186675] hover:bg-[#13525e] text-white py-2 rounded text-[13px] font-bold transition-colors">
             Start Tracker
