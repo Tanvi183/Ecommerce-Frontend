@@ -305,7 +305,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                       <div className="absolute -top-[7px] left-6 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-white"></div>
 
                       <ul className="py-2">
-                        {link.subLinks.map(sub => (
+                        {link.subLinks.map((sub: any) => (
                           <li key={sub.href}>
                             <Link
                               href={sub.href}
