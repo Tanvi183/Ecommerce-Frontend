@@ -21,6 +21,10 @@ export const createFeature = (data: any) => api.post('/features', data);
 export const updateFeature = (id: string, data: any) => api.put(`/features/${id}`, data);
 export const deleteFeature = (id: string) => api.delete(`/features/${id}`);
 
+// Appearance Settings
+export const getSettings = () => api.get('/settings');
+export const updateSettings = (data: any) => api.put('/settings', data);
+
 // Products
 export const getProductsAdmin = (params?: any) => api.get('/products', { params });
 export const createProduct = (data: any) => api.post('/products', data);

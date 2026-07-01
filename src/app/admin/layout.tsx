@@ -28,7 +28,8 @@ import {
   ChevronDown,
   Menu,
   Activity,
-  HeartHandshake
+  HeartHandshake,
+  BadgePercent
 } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
@@ -52,6 +53,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Categories", path: "/admin/categories", icon: Grid },
     { name: "Others Feature", path: "/admin/others-feature", icon: Globe },
     { name: "Brands", path: "/admin/brands", icon: Tag },
+    { name: "Offers", path: "/admin/offers", icon: BadgePercent, badge: "Sale" },
+    { name: "Appearance", path: "/admin/appearance", icon: Sun },
+    { name: "Navigation Menu", path: "/admin/navigation", icon: Menu },
     { name: "Orders", path: "/admin/orders", icon: FileText },
     { name: "Customers", path: "/admin/customers", icon: Users },
     { name: "Low-Stock", path: "/admin/low-stock", icon: Activity, badge: "Alert" },

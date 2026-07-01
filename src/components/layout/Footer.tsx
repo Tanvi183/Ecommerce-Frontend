@@ -4,9 +4,27 @@ import Link from "next/link";
 import Container from "@/components/common/Container";
 import { ROUTES } from "@/constants/routes";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getSettings } from "@/lib/adminApi";
 
 export default function Footer() {
   const pathname = usePathname();
+  const [services, setServices] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchFooterData = async () => {
+      try {
+        const res = await getSettings();
+        if (res.data.success && res.data.data.footer?.services) {
+          setServices(res.data.data.footer.services);
+        }
+      } catch (error) {
+        console.error("Failed to load footer settings", error);
+      }
+    };
+    fetchFooterData();
+  }, []);
+
   if (pathname.startsWith('/admin')) return null;
 
   return (
@@ -65,10 +83,18 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold text-lg mb-6">Service</h4>
             <ul className="space-y-4">
-              <li><Link href={ROUTES.wallpaper} className="hover:text-white transition-colors">Wallpaper</Link></li>
-              <li><Link href={ROUTES.floorItem} className="hover:text-white transition-colors">Floor Item</Link></li>
-              <li><Link href={ROUTES.blind} className="hover:text-white transition-colors">Blind</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Brands</Link></li>
+              {services.length > 0 ? (
+                services.map((service, index) => (
+                  <li key={index}><Link href={service.href} className="hover:text-white transition-colors">{service.label}</Link></li>
+                ))
+              ) : (
+                <>
+                  <li><Link href={ROUTES.wallpaper} className="hover:text-white transition-colors">Wallpaper</Link></li>
+                  <li><Link href={ROUTES.floorItem} className="hover:text-white transition-colors">Floor Item</Link></li>
+                  <li><Link href={ROUTES.blind} className="hover:text-white transition-colors">Blind</Link></li>
+                  <li><Link href="#" className="hover:text-white transition-colors">Brands</Link></li>
+                </>
+              )}
             </ul>
           </div>
 
