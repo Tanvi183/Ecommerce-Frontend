@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getOrdersAdmin, updateOrderStatus } from "@/lib/adminApi";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { FileText, Eye } from "lucide-react";
 
 export default function AdminOrdersPage() {
@@ -179,6 +179,9 @@ export default function AdminOrdersPage() {
                     <p>{selectedOrder.shippingAddress?.street || 'N/A'}</p>
                     <p>{selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.state} {selectedOrder.shippingAddress?.zip}</p>
                     <p>{selectedOrder.shippingAddress?.country}</p>
+                    {selectedOrder.shippingAddress?.phone && (
+                      <p className="mt-2 text-gray-600"><span className="font-bold">Phone:</span> {selectedOrder.shippingAddress.phone}</p>
+                    )}
                   </div>
                 </div>
               </div>

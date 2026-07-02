@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import { Product } from "@/types";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 
 interface WishlistToastProps {
   product: Product;

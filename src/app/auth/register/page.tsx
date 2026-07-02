@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/useAuthStore";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { getCategories, createCategory, updateCategory, deleteCategory } from "@/lib/adminApi";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { Edit2, Trash2, Plus, X, CornerDownRight, ChevronRight, ChevronDown } from "lucide-react";
 import Swal from "sweetalert2";
 

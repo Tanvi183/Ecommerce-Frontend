@@ -8,7 +8,7 @@ import { ROUTES } from "@/constants/routes";
 import Container from "@/components/common/Container";
 import ProfileSidebar from "@/components/profile/ProfileSidebar";
 import api from "@/lib/api";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import Button from "@/components/ui/Button";
 
 export default function NewsletterPage() {

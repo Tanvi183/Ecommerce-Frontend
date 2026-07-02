@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getCustomersAdmin } from "@/lib/adminApi";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { Users, Mail } from "lucide-react";
 
 export default function AdminCustomersPage() {

@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
 import { useAuthStore } from "@/store/useAuthStore";
 import api from "@/lib/api";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 
 import Swal from "sweetalert2";
 

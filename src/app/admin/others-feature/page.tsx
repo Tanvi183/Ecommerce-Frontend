@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { getFeatures, createFeature, updateFeature, deleteFeature } from "@/lib/adminApi";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { Edit2, Trash2, Plus, X } from "lucide-react";
 import Swal from "sweetalert2";
 

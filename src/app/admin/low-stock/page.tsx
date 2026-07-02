@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getLowStockProducts, updateProductStock } from "@/lib/adminApi";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { AlertTriangle } from "lucide-react";
 
 export default function AdminLowStockPage() {

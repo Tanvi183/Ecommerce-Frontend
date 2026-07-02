@@ -3,17 +3,18 @@
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import Container from "@/components/common/Container";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/useAuthStore";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const setAuth = useAuthStore(state => state.setAuth);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,7 +27,12 @@ export default function LoginPage() {
       if (res.data.success) {
         setAuth(res.data.data, res.data.accessToken);
         toast.success("Login successful!");
-        if (res.data.data.role === "ADMIN") {
+        
+        const redirectUrl = searchParams.get("redirect");
+        
+        if (redirectUrl) {
+          router.push(redirectUrl);
+        } else if (res.data.data.role === "ADMIN") {
           router.push("/admin");
         } else {
           router.push(ROUTES.profile);
@@ -70,9 +76,9 @@ export default function LoginPage() {
               <div className="mt-auto">
                 <Link 
                   href={ROUTES.register}
-                  className="block text-center bg-[#2b7e8d] hover:bg-[#1e616e] text-white px-8 py-2.5 text-[14px] font-bold transition-colors w-full"
+                  className="inline-block bg-[var(--primary)] text-white text-[14px] font-bold uppercase px-8 py-3 rounded hover:bg-[#13525e] transition-colors shadow-sm"
                 >
-                  Continue
+                  CONTINUE
                 </Link>
               </div>
             </div>
@@ -80,54 +86,42 @@ export default function LoginPage() {
             {/* Returning Customer Column */}
             <div className="flex flex-col h-full">
               <h2 className="text-[16px] font-bold text-[#333] mb-4">Returning Customer</h2>
+              <p className="text-[14px] text-[#444] mb-6">I am a returning customer</p>
               
-              <form className="flex flex-col flex-1" onSubmit={handleSubmit}>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 mb-3">
-                  <label htmlFor="email" className="w-[160px] flex-shrink-0 text-[14px] text-[#444]">
-                    E Mail Address
-                  </label>
+              <form onSubmit={handleSubmit} className="flex flex-col flex-1">
+                <div className="mb-4">
+                  <label className="block text-[14px] text-[#333] font-bold mb-2">E-Mail Address</label>
                   <input 
                     type="email" 
-                    id="email" 
-                    name="email"
+                    required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="E Mail Address" 
-                    className="flex-1 border border-[#efefef] px-3 py-2 outline-none focus:border-[#2b7e8d] text-[14px] transition-colors bg-[#fdfdfd] placeholder:text-[#999]"
-                    required
+                    className="w-full border border-[#ddd] rounded px-4 py-2.5 text-[14px] focus:outline-none focus:border-[var(--primary)] transition-colors bg-[#f8f9fa]"
+                    placeholder="E-Mail Address"
                   />
                 </div>
-                
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 mb-2">
-                  <label htmlFor="password" className="w-[160px] flex-shrink-0 text-[14px] text-[#444]">
-                    Password
-                  </label>
+                <div className="mb-4">
+                  <label className="block text-[14px] text-[#333] font-bold mb-2">Password</label>
                   <input 
                     type="password" 
-                    id="password" 
-                    name="password"
+                    required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password" 
-                    className="flex-1 border border-[#efefef] px-3 py-2 outline-none focus:border-[#2b7e8d] text-[14px] transition-colors bg-[#fdfdfd] placeholder:text-[#999]"
-                    required
+                    className="w-full border border-[#ddd] rounded px-4 py-2.5 text-[14px] focus:outline-none focus:border-[var(--primary)] transition-colors bg-[#f8f9fa]"
+                    placeholder="Password"
                   />
-                </div>
-                
-                <div className="mb-8 flex">
-                  <div className="w-[160px] flex-shrink-0 hidden sm:block"></div>
-                  <Link href={ROUTES.forgotPassword} className="text-[14px] font-bold text-[#2b7e8d] hover:text-[#186675] hover:underline">
-                    Forgotten Password
-                  </Link>
+                  <div className="mt-3 text-right">
+                    <Link href={ROUTES.forgotPassword} className="text-[13px] text-[#186675] hover:underline">Forgotten Password</Link>
+                  </div>
                 </div>
                 
                 <div className="mt-auto">
                   <button 
                     type="submit"
                     disabled={isLoading}
-                    className="bg-[#2b7e8d] hover:bg-[#1e616e] text-white px-8 py-2.5 text-[14px] font-bold transition-colors w-full disabled:opacity-50"
+                    className="bg-[var(--primary)] text-white text-[14px] font-bold uppercase px-8 py-3 rounded hover:bg-[#13525e] transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    {isLoading ? "Logging in..." : "Login"}
+                    {isLoading ? "LOGGING IN..." : "LOGIN"}
                   </button>
                 </div>
               </form>
@@ -136,5 +130,13 @@ export default function LoginPage() {
         </div>
       </Container>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

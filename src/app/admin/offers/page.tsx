@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { getProductsAdmin, updateProduct } from "@/lib/adminApi";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { Plus, Search, Trash2, X, BadgePercent } from "lucide-react";
 import Image from "next/image";
 

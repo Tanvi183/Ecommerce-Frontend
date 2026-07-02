@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { getSettings, updateSettings } from "@/lib/adminApi";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { Save, Plus, Trash2, Link as LinkIcon, MoveUp, MoveDown } from "lucide-react";
 
 export default function AdminNavigationPage() {
