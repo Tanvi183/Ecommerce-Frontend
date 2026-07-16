@@ -53,14 +53,15 @@
     --shadow-card-hover: 0 4px 8px rgba(0,0,0,0.1); /* Very subtle hover shadow */
   }
 
-  [data-theme="dark"] {
-    /* No dark mode on reference site, forcing light */
-    --background: #f8f9fa;
-    --foreground: #333333;
-    --card: #ffffff;
-    --border: #dee2e6;
+  .dark {
+    --background: #111827; /* Tailwind gray-900 */
+    --foreground: #f9fafb; /* Tailwind gray-50 */
+    --card: #1f2937; /* Tailwind gray-800 */
+    --border: #374151; /* Tailwind gray-700 */
   }
 }
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   * {

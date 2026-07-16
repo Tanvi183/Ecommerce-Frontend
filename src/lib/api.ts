@@ -56,7 +56,7 @@ api.interceptors.response.use(
         
         // Optionally, redirect to login page here, or just reject the promise
         if (typeof window !== 'undefined') {
-            // window.location.href = '/auth/login';
+            window.location.href = '/auth/login';
         }
         
         return Promise.reject(refreshError);

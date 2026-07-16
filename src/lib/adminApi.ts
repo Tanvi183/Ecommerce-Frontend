@@ -27,6 +27,7 @@ export const updateSettings = (data: any) => api.put('/settings', data);
 
 // Products
 export const getProductsAdmin = (params?: any) => api.get('/products', { params });
+export const getProductBySlug = (slug: string) => api.get(`/products/${slug}`);
 export const createProduct = (data: any) => api.post('/products', data);
 export const updateProduct = (id: string, data: any) => api.put(`/products/${id}`, data);
 export const deleteProduct = (id: string) => api.delete(`/products/${id}`);
@@ -49,3 +50,10 @@ export const getCustomersAdmin = (params?: any) => api.get('/admin/customers', {
 // Wait, I can quickly add a `getAllReviews` to the backend admin controller, or just skip global reviews.
 // Let's implement deleteReview here.
 export const deleteReview = (id: string) => api.delete(`/reviews/${id}`);
+
+// Schedules
+export const getSchedules = () => api.get('/schedules');
+export const createSchedule = (data: any) => api.post('/schedules', data);
+export const deleteSchedule = (id: string) => api.delete(/schedules/);
+
+export const updateSchedule = (id: string, data: any) => api.put(/schedules/, data);

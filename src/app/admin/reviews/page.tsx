@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 export default function AdminReviewsPage() {
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-        <h1 className="text-[20px] font-bold text-gray-800">Reviews Management</h1>
+      <div className="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-gray-700">
+        <h1 className="text-[20px] font-bold text-gray-800 dark:text-gray-100">Reviews Management</h1>
       </div>
       
       <div className="bg-blue-50 border border-blue-200 text-blue-700 p-4 rounded-lg text-[14px]">

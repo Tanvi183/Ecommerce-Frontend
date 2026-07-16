@@ -10,16 +10,16 @@ const CategoryRow = ({ category, level, onEdit, onDelete, onAddSub }: { category
   const [isExpanded, setIsExpanded] = useState(false); // Collapsed by default
   const hasChildren = category.children && category.children.length > 0;
 
-  let rowBg = 'bg-white';
+  let rowBg = 'bg-white dark:bg-gray-800';
   if (level === 1) rowBg = 'bg-[#fafafa]';
   if (level >= 2) rowBg = 'bg-[#f1f5f9]'; // very subtle blue-gray tint for sub-subcategories
 
   return (
     <React.Fragment>
-      <tr className={`border-b border-gray-100 hover:bg-gray-50 transition-colors group ${rowBg}`}>
+      <tr className={`border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group ${rowBg}`}>
         <td className="px-6 py-4 w-20">
           {level === 0 ? (
-            <div className="w-12 h-12 bg-gray-50 rounded-lg border border-gray-100 overflow-hidden shadow-sm flex-shrink-0">
+            <div className="w-12 h-12 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm flex-shrink-0">
               {category.image ? (
                 <img src={category.image} alt={category.name} className="w-full h-full object-cover" />
               ) : (
@@ -30,21 +30,21 @@ const CategoryRow = ({ category, level, onEdit, onDelete, onAddSub }: { category
             </div>
           ) : null}
         </td>
-        <td className="px-6 py-4 text-gray-700 flex items-center gap-3" style={{ paddingLeft: `${(level * 32) + 24}px` }}>
-          {level > 0 && <div className="w-4 border-t-2 border-gray-200"></div>}
+        <td className="px-6 py-4 text-gray-700 dark:text-gray-200 flex items-center gap-3" style={{ paddingLeft: `${(level * 32) + 24}px` }}>
+          {level > 0 && <div className="w-4 border-t-2 border-gray-200 dark:border-gray-700"></div>}
           {hasChildren ? (
-            <button onClick={() => setIsExpanded(!isExpanded)} className="w-6 h-6 flex items-center justify-center bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 rounded shadow-sm text-gray-500 transition-all flex-shrink-0">
+            <button onClick={() => setIsExpanded(!isExpanded)} className="w-6 h-6 flex items-center justify-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:border-gray-300 dark:border-gray-600 rounded shadow-sm text-gray-500 dark:text-gray-400 transition-all flex-shrink-0">
               {isExpanded ? <ChevronDown size={14} strokeWidth={2.5} /> : <ChevronRight size={14} strokeWidth={2.5} />}
             </button>
           ) : (
             <div className="w-6 flex-shrink-0"></div>
           )}
-          <span className={level === 0 ? "text-[15px] font-bold text-gray-900" : "text-[14px] text-gray-700 font-medium"}>{category.name}</span>
+          <span className={level === 0 ? "text-[15px] font-bold text-gray-900" : "text-[14px] text-gray-700 dark:text-gray-200 font-medium"}>{category.name}</span>
         </td>
-        <td className="px-6 py-4 text-gray-500 text-[13px]">{category.slug}</td>
+        <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-[13px]">{category.slug}</td>
         <td className="px-6 py-4 text-center">
            {category.children?.length ? (
-             <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-[#186675]/10 text-[#186675] text-[12px] font-bold">
+             <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-[#186675] dark:bg-gray-950/10 text-[#186675] text-[12px] font-bold">
                {category.children.length} Sub{category.children.length > 1 ? 's' : ''}
              </span>
            ) : (
@@ -53,13 +53,13 @@ const CategoryRow = ({ category, level, onEdit, onDelete, onAddSub }: { category
         </td>
         <td className="px-6 py-4 text-right">
           <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button onClick={() => onAddSub(category._id)} className="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors" title="Add Subcategory">
+            <button onClick={() => onAddSub((category._id || category.id))} className="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors" title="Add Subcategory">
               <CornerDownRight size={16} strokeWidth={2.5} />
             </button>
             <button onClick={() => onEdit(category)} className="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors" title="Edit">
               <Edit2 size={16} strokeWidth={2.5} />
             </button>
-            <button onClick={() => onDelete(category._id)} className="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" title="Delete">
+            <button onClick={() => onDelete((category._id || category.id))} className="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" title="Delete">
               <Trash2 size={16} strokeWidth={2.5} />
             </button>
           </div>
@@ -67,7 +67,7 @@ const CategoryRow = ({ category, level, onEdit, onDelete, onAddSub }: { category
       </tr>
       
       {isExpanded && hasChildren && category.children.map((child: any) => (
-        <CategoryRow key={child._id} category={{...child, parentId: category._id}} level={level + 1} onEdit={onEdit} onDelete={onDelete} onAddSub={onAddSub} />
+        <CategoryRow key={(child._id || child.id)} category={{...child, parentId: (category._id || category.id)}} level={level + 1} onEdit={onEdit} onDelete={onDelete} onAddSub={onAddSub} />
       ))}
     </React.Fragment>
   );
@@ -113,8 +113,8 @@ export default function AdminCategoriesPage() {
       } else {
         const findPath = (cats: any[], targetId: string, currentPath: string[]): string[] | null => {
           for (const cat of cats) {
-            const newPath = [...currentPath, cat._id];
-            if (cat._id === targetId) return newPath;
+            const newPath = [...currentPath, (cat._id || cat.id)];
+            if ((cat._id || cat.id) === targetId) return newPath;
             if (cat.children && cat.children.length > 0) {
               const found = findPath(cat.children, targetId, newPath);
               if (found) return found;
@@ -130,7 +130,7 @@ export default function AdminCategoriesPage() {
 
   const handleOpenModal = (category?: any) => {
     if (category) {
-      setEditingId(category._id);
+      setEditingId((category._id || category.id));
       setFormData({
         name: category.name,
         slug: category.slug,
@@ -218,7 +218,7 @@ export default function AdminCategoriesPage() {
       <div className="flex justify-between items-center pb-6">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 tracking-tight">Categories</h1>
-          <p className="text-[14px] text-gray-500 mt-1">Manage your product categories and nested subcategories.</p>
+          <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-1">Manage your product categories and nested subcategories.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
@@ -228,11 +228,11 @@ export default function AdminCategoriesPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-[14px]">
             <thead>
-              <tr className="bg-[#f8f9fa] border-b border-gray-100 text-gray-500 font-semibold uppercase text-[12px] tracking-wider">
+              <tr className="bg-[#f8f9fa] dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-800 text-gray-500 dark:text-gray-400 font-semibold uppercase text-[12px] tracking-wider">
                 <th className="px-6 py-4">Image</th>
                 <th className="px-6 py-4">Category Name</th>
                 <th className="px-6 py-4">Slug</th>
@@ -242,11 +242,11 @@ export default function AdminCategoriesPage() {
             </thead>
             <tbody>
               {categories.map((cat) => (
-                <CategoryRow key={cat._id} category={cat} level={0} onEdit={handleOpenModal} onDelete={handleDelete} onAddSub={handleAddSub} />
+                <CategoryRow key={(cat._id || cat.id)} category={cat} level={0} onEdit={handleOpenModal} onDelete={handleDelete} onAddSub={handleAddSub} />
               ))}
               {categories.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">No categories found.</td>
+                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">No categories found.</td>
                 </tr>
               )}
             </tbody>
@@ -257,37 +257,37 @@ export default function AdminCategoriesPage() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform transition-all">
-            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform transition-all">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
               <h2 className="text-[18px] font-bold text-gray-900">{editingId ? "Edit Category" : "Add New Category"}</h2>
-              <button onClick={handleCloseModal} className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"><X size={20} /></button>
+              <button onClick={handleCloseModal} className="text-gray-400 hover:text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-full transition-colors"><X size={20} /></button>
             </div>
             
             <form onSubmit={handleSubmit} className="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
               <div>
-                <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Name <span className="text-red-500">*</span></label>
+                <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200 mb-1.5">Name <span className="text-red-500">*</span></label>
                 <input 
                   type="text" 
                   value={formData.name} 
                   onChange={handleNameChange} 
                   required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all"
                 />
               </div>
               
               <div>
-                <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Slug <span className="text-red-500">*</span></label>
+                <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200 mb-1.5">Slug <span className="text-red-500">*</span></label>
                 <input 
                   type="text" 
                   value={formData.slug} 
                   onChange={(e) => setFormData({...formData, slug: e.target.value})} 
                   required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all bg-gray-50/50"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all bg-gray-50 dark:bg-gray-800/50"
                 />
               </div>
 
-              <div className="space-y-4 bg-gray-50/50 p-5 rounded-xl border border-gray-100">
-                <label className="block text-[13px] font-bold text-gray-700">Category Placement</label>
+              <div className="space-y-4 bg-gray-50 dark:bg-gray-800/50 p-5 rounded-xl border border-gray-100 dark:border-gray-800">
+                <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200">Category Placement</label>
                 
                 {/* Level 1 Dropdown */}
                 <select 
@@ -302,11 +302,11 @@ export default function AdminCategoriesPage() {
                       setFormData({ ...formData, parentId: val });
                     }
                   }}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all bg-white shadow-sm"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all bg-white dark:bg-gray-800 shadow-sm"
                 >
                   <option value="">None (Top-Level Category)</option>
                   {categories.map(cat => (
-                    <option key={cat._id} value={cat._id} disabled={cat._id === editingId}>
+                    <option key={(cat._id || cat.id)} value={(cat._id || cat.id)} disabled={(cat._id || cat.id) === editingId}>
                       {cat.name}
                     </option>
                   ))}
@@ -316,7 +316,7 @@ export default function AdminCategoriesPage() {
                 {selectedPath.map((pathId, index) => {
                   const findCat = (cats: any[], id: string): any => {
                     for (const c of cats) {
-                      if (c._id === id) return c;
+                      if ((c._id || c.id) === id) return c;
                       if (c.children) {
                         const found = findCat(c.children, id);
                         if (found) return found;
@@ -349,11 +349,11 @@ export default function AdminCategoriesPage() {
                           }
                           setSelectedPath(newPath);
                         }}
-                        className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all bg-white shadow-sm"
+                        className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all bg-white dark:bg-gray-800 shadow-sm"
                       >
                         <option value="">-- Direct Subcategory of {currentCat.name} --</option>
                         {currentCat.children.map((child: any) => (
-                          <option key={child._id} value={child._id} disabled={child._id === editingId}>
+                          <option key={(child._id || child.id)} value={(child._id || child.id)} disabled={(child._id || child.id) === editingId}>
                             {child.name}
                           </option>
                         ))}
@@ -364,23 +364,23 @@ export default function AdminCategoriesPage() {
               </div>
 
               <div>
-                <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Image URL</label>
+                <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200 mb-1.5">Image URL</label>
                 <input 
                   type="text" 
                   value={formData.image} 
                   onChange={(e) => setFormData({...formData, image: e.target.value})} 
                   placeholder="/categories/category.png"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all"
                 />
               </div>
               
               <div>
-                <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Description</label>
+                <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200 mb-1.5">Description</label>
                 <textarea 
                   value={formData.description} 
                   onChange={(e) => setFormData({...formData, description: e.target.value})} 
                   rows={3}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all"
                 />
               </div>
 
@@ -392,14 +392,14 @@ export default function AdminCategoriesPage() {
                   onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
                   className="w-4 h-4 accent-[#186675] rounded cursor-pointer"
                 />
-                <label htmlFor="isActive" className="text-[14px] font-medium text-gray-700 cursor-pointer select-none">Active Status</label>
+                <label htmlFor="isActive" className="text-[14px] font-medium text-gray-700 dark:text-gray-200 cursor-pointer select-none">Active Status</label>
               </div>
 
-              <div className="pt-4 border-t border-gray-100 flex justify-end gap-3 mt-6">
+              <div className="pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-end gap-3 mt-6">
                 <button 
                   type="button" 
                   onClick={handleCloseModal}
-                  className="px-5 py-2.5 text-[14px] font-bold text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="px-5 py-2.5 text-[14px] font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
                   Cancel
                 </button>

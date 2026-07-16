@@ -94,15 +94,15 @@ export default function AdminNavigationPage() {
   };
 
   if (isLoading) {
-    return <div className="p-8 text-center text-gray-500 font-medium animate-pulse">Loading navigation data...</div>;
+    return <div className="p-8 text-center text-gray-500 dark:text-gray-400 font-medium animate-pulse">Loading navigation data...</div>;
   }
 
   return (
     <div className="space-y-6 pb-20">
-      <div className="flex justify-between items-center pb-6 border-b border-gray-100">
+      <div className="flex justify-between items-center pb-6 border-b border-gray-100 dark:border-gray-800">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 tracking-tight">Navigation Menu</h1>
-          <p className="text-[14px] text-gray-500 mt-1">Manage the top navigation links and dropdown menus.</p>
+          <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-1">Manage the top navigation links and dropdown menus.</p>
         </div>
         <button 
           onClick={handleSave}
@@ -113,11 +113,11 @@ export default function AdminNavigationPage() {
         </button>
       </div>
 
-      <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-        <p className="text-[14px] text-gray-600 font-medium">Add main links to your header navbar.</p>
+      <div className="flex justify-between items-center bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm">
+        <p className="text-[14px] text-gray-600 dark:text-gray-300 font-medium">Add main links to your header navbar.</p>
         <button 
           onClick={addParentLink}
-          className="bg-[#186675]/10 text-[#186675] hover:bg-[#186675]/20 px-4 py-2 rounded-lg text-[13px] font-bold flex items-center gap-2 transition-colors"
+          className="bg-[#186675] dark:bg-gray-950/10 text-[#186675] hover:bg-[#186675] dark:bg-gray-950/20 px-4 py-2 rounded-lg text-[13px] font-bold flex items-center gap-2 transition-colors"
         >
           <Plus size={16} /> Add Main Link
         </button>
@@ -125,9 +125,9 @@ export default function AdminNavigationPage() {
 
       <div className="space-y-4 max-w-4xl">
         {navLinks.map((link, pIndex) => (
-          <div key={link.id || pIndex} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div key={link.id || pIndex} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
             {/* Parent Link Row */}
-            <div className="p-4 bg-gray-50/80 border-b border-gray-100 flex items-start gap-4">
+            <div className="p-4 bg-gray-50 dark:bg-gray-800/50/80 border-b border-gray-100 dark:border-gray-800 flex items-start gap-4">
               <div className="flex flex-col gap-1 mt-1 opacity-50">
                 <button onClick={() => moveParentLink(pIndex, 'up')} disabled={pIndex === 0} className="hover:text-[#186675] disabled:opacity-30"><MoveUp size={16} /></button>
                 <button onClick={() => moveParentLink(pIndex, 'down')} disabled={pIndex === navLinks.length - 1} className="hover:text-[#186675] disabled:opacity-30"><MoveDown size={16} /></button>
@@ -135,21 +135,21 @@ export default function AdminNavigationPage() {
 
               <div className="flex-1 grid grid-cols-12 gap-4">
                 <div className="col-span-5">
-                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1 block">Label</label>
+                  <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">Label</label>
                   <input 
                     type="text" 
                     value={link.label}
                     onChange={(e) => updateParentLink(pIndex, 'label', e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-1.5 text-[14px] outline-none focus:ring-1 focus:ring-[#186675] focus:border-[#186675] font-bold"
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-[14px] outline-none focus:ring-1 focus:ring-[#186675] focus:border-[#186675] font-bold"
                   />
                 </div>
                 <div className="col-span-5">
-                  <label className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1 block">URL (href)</label>
+                  <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 block">URL (href)</label>
                   <input 
                     type="text" 
                     value={link.href}
                     onChange={(e) => updateParentLink(pIndex, 'href', e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-1.5 text-[14px] outline-none focus:ring-1 focus:ring-[#186675] focus:border-[#186675]"
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-[14px] outline-none focus:ring-1 focus:ring-[#186675] focus:border-[#186675]"
                   />
                 </div>
                 <div className="col-span-2 flex items-center pt-5">
@@ -177,9 +177,9 @@ export default function AdminNavigationPage() {
             </div>
 
             {/* Sublinks Section */}
-            <div className="p-4 bg-white pl-14">
+            <div className="p-4 bg-white dark:bg-gray-800 pl-14">
               <div className="flex justify-between items-center mb-3">
-                <h4 className="text-[12px] font-bold text-gray-500 uppercase tracking-wider">Dropdown Sub-links</h4>
+                <h4 className="text-[12px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Dropdown Sub-links</h4>
                 <button 
                   onClick={() => addSubLink(pIndex)}
                   className="text-[12px] font-bold text-[#186675] hover:text-[#13525e] flex items-center gap-1"
@@ -191,13 +191,13 @@ export default function AdminNavigationPage() {
               {link.subLinks && link.subLinks.length > 0 ? (
                 <div className="space-y-2">
                   {link.subLinks.map((subLink: any, sIndex: number) => (
-                    <div key={sIndex} className="flex items-center gap-3 bg-gray-50 p-2 rounded border border-gray-100">
+                    <div key={sIndex} className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800/50 p-2 rounded border border-gray-100 dark:border-gray-800">
                       <div className="w-1/2">
                         <input 
                           type="text" 
                           value={subLink.label}
                           onChange={(e) => updateSubLink(pIndex, sIndex, 'label', e.target.value)}
-                          className="w-full border border-gray-300 rounded px-3 py-1.5 text-[13px] outline-none focus:ring-1 focus:ring-[#186675]"
+                          className="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-[13px] outline-none focus:ring-1 focus:ring-[#186675]"
                           placeholder="Sublink Label"
                         />
                       </div>
@@ -206,7 +206,7 @@ export default function AdminNavigationPage() {
                           type="text" 
                           value={subLink.href}
                           onChange={(e) => updateSubLink(pIndex, sIndex, 'href', e.target.value)}
-                          className="w-full border border-gray-300 rounded px-3 py-1.5 text-[13px] outline-none focus:ring-1 focus:ring-[#186675]"
+                          className="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-[13px] outline-none focus:ring-1 focus:ring-[#186675]"
                           placeholder="Sublink URL"
                         />
                       </div>
@@ -227,13 +227,13 @@ export default function AdminNavigationPage() {
         ))}
 
         {navLinks.length === 0 && (
-          <div className="text-center py-12 bg-white border border-gray-200 border-dashed rounded-xl">
+          <div className="text-center py-12 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 border-dashed rounded-xl">
             <LinkIcon size={40} className="mx-auto text-gray-300 mb-3" />
             <h3 className="text-[16px] font-bold text-gray-900">No Links Added</h3>
-            <p className="text-[14px] text-gray-500 mt-1 mb-4">Start building your navigation menu.</p>
+            <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-1 mb-4">Start building your navigation menu.</p>
             <button 
               onClick={addParentLink}
-              className="bg-[#186675] text-white hover:bg-[#13525e] px-4 py-2 rounded-lg text-[13px] font-bold inline-flex items-center gap-2 transition-colors"
+              className="bg-[#186675] text-white hover:bg-[#13525e] dark:bg-gray-800 px-4 py-2 rounded-lg text-[13px] font-bold inline-flex items-center gap-2 transition-colors"
             >
               <Plus size={16} /> Add First Link
             </button>

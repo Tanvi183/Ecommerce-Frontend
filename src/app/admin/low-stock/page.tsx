@@ -41,20 +41,20 @@ export default function AdminLowStockPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center pb-4 border-b border-gray-200">
+      <div className="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-gray-700">
         <div>
-          <h1 className="text-[20px] font-bold text-gray-800 flex items-center gap-2">
+          <h1 className="text-[20px] font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
             Low Stock Alerts <AlertTriangle className="text-orange-500" size={24} />
           </h1>
-          <p className="text-[13px] text-gray-500 mt-1">Products that are out of stock or running low (≤ 10).</p>
+          <p className="text-[13px] text-gray-500 dark:text-gray-400 mt-1">Products that are out of stock or running low (≤ 10).</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-[14px]">
             <thead>
-              <tr className="bg-[#f8f9fa] border-b border-gray-100 text-gray-600 font-bold uppercase text-[12px]">
+              <tr className="bg-[#f8f9fa] dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-800 text-gray-600 dark:text-gray-300 font-bold uppercase text-[12px]">
                 <th className="px-6 py-4">Product</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4 text-center">Current Stock</th>
@@ -63,7 +63,7 @@ export default function AdminLowStockPage() {
             </thead>
             <tbody>
               {products.map((product) => (
-                <tr key={product._id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                <tr key={(product._id || product.id)} className="border-b border-gray-50 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-gray-100 rounded overflow-hidden flex-shrink-0">
@@ -74,8 +74,8 @@ export default function AdminLowStockPage() {
                         )}
                       </div>
                       <div>
-                        <div className="font-bold text-gray-800 line-clamp-1">{product.name}</div>
-                        <div className="text-[12px] text-gray-500">SKU: {product.sku}</div>
+                        <div className="font-bold text-gray-800 dark:text-gray-100 line-clamp-1">{product.name}</div>
+                        <div className="text-[12px] text-gray-500 dark:text-gray-400">SKU: {product.sku}</div>
                       </div>
                     </div>
                   </td>
@@ -86,7 +86,7 @@ export default function AdminLowStockPage() {
                       {product.stockStatus === 'out_of_stock' ? 'Out of Stock' : 'Low Stock'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-center font-bold text-[16px] text-gray-800">
+                  <td className="px-6 py-4 text-center font-bold text-[16px] text-gray-800 dark:text-gray-100">
                     {product.stock}
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -97,11 +97,11 @@ export default function AdminLowStockPage() {
                         defaultValue={product.stock}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') {
-                            handleUpdateStock(product._id, Number(e.currentTarget.value));
+                            handleUpdateStock((product._id || product.id), Number(e.currentTarget.value));
                           }
                         }}
-                        onBlur={(e) => handleUpdateStock(product._id, Number(e.currentTarget.value))}
-                        className="w-20 border border-gray-300 rounded px-2 py-1.5 text-[14px] outline-none focus:border-[#186675] text-center"
+                        onBlur={(e) => handleUpdateStock((product._id || product.id), Number(e.currentTarget.value))}
+                        className="w-20 border border-gray-300 dark:border-gray-600 rounded px-2 py-1.5 text-[14px] outline-none focus:border-[#186675] text-center"
                       />
                     </div>
                   </td>
@@ -109,7 +109,7 @@ export default function AdminLowStockPage() {
               ))}
               {products.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500">No low stock products. Everything is well stocked!</td>
+                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">No low stock products. Everything is well stocked!</td>
                 </tr>
               )}
             </tbody>

@@ -36,17 +36,17 @@ export default function AdminCustomersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-        <h1 className="text-[20px] font-bold text-gray-800 flex items-center gap-2">
+      <div className="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-gray-700">
+        <h1 className="text-[20px] font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
           <Users size={24} className="text-[#186675]" /> Customers Directory
         </h1>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-[14px]">
             <thead>
-              <tr className="bg-[#f8f9fa] border-b border-gray-100 text-gray-600 font-bold uppercase text-[12px]">
+              <tr className="bg-[#f8f9fa] dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-800 text-gray-600 dark:text-gray-300 font-bold uppercase text-[12px]">
                 <th className="px-6 py-4">Customer</th>
                 <th className="px-6 py-4">Email</th>
                 <th className="px-6 py-4">Role</th>
@@ -55,16 +55,16 @@ export default function AdminCustomersPage() {
             </thead>
             <tbody>
               {customers.map((customer) => (
-                <tr key={customer._id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                <tr key={(customer._id || customer.id)} className="border-b border-gray-50 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[#186675] text-white flex items-center justify-center font-bold text-[12px]">
                         {customer.name.charAt(0).toUpperCase()}
                       </div>
-                      <span className="font-bold text-gray-800">{customer.name}</span>
+                      <span className="font-bold text-gray-800 dark:text-gray-100">{customer.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-gray-600 flex items-center gap-2">
+                  <td className="px-6 py-4 text-gray-600 dark:text-gray-300 flex items-center gap-2">
                     <Mail size={14} className="text-gray-400" />
                     <a href={`mailto:${customer.email}`} className="hover:text-[#186675] transition-colors">{customer.email}</a>
                   </td>
@@ -73,14 +73,14 @@ export default function AdminCustomersPage() {
                       {customer.role}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right text-gray-500">
+                  <td className="px-6 py-4 text-right text-gray-500 dark:text-gray-400">
                     {new Date(customer.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                   </td>
                 </tr>
               ))}
               {customers.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500">No customers found.</td>
+                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">No customers found.</td>
                 </tr>
               )}
             </tbody>
@@ -89,19 +89,19 @@ export default function AdminCustomersPage() {
         
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-between items-center px-6 py-4 border-t border-gray-100">
+          <div className="flex justify-between items-center px-6 py-4 border-t border-gray-100 dark:border-gray-800">
             <button 
               onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="px-3 py-1 text-[13px] border border-gray-300 rounded disabled:opacity-50"
+              className="px-3 py-1 text-[13px] border border-gray-300 dark:border-gray-600 rounded disabled:opacity-50"
             >
               Previous
             </button>
-            <span className="text-[13px] text-gray-600">Page {page} of {totalPages}</span>
+            <span className="text-[13px] text-gray-600 dark:text-gray-300">Page {page} of {totalPages}</span>
             <button 
               onClick={() => setPage(p => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="px-3 py-1 text-[13px] border border-gray-300 rounded disabled:opacity-50"
+              className="px-3 py-1 text-[13px] border border-gray-300 dark:border-gray-600 rounded disabled:opacity-50"
             >
               Next
             </button>

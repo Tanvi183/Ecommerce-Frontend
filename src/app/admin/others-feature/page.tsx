@@ -39,7 +39,7 @@ export default function AdminFeaturesPage() {
 
   const handleOpenModal = (feature?: any) => {
     if (feature) {
-      setEditingId(feature._id);
+      setEditingId((feature._id || feature.id));
       setFormData({
         name: feature.name,
         slug: feature.slug,
@@ -112,7 +112,7 @@ export default function AdminFeaturesPage() {
       <div className="flex justify-between items-center pb-6">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 tracking-tight">Others Feature</h1>
-          <p className="text-[14px] text-gray-500 mt-1">Manage your standalone service features.</p>
+          <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-1">Manage your standalone service features.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
@@ -122,11 +122,11 @@ export default function AdminFeaturesPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#f8f9fa] border-b border-gray-100 text-gray-500 font-semibold uppercase text-[12px] tracking-wider">
+              <tr className="bg-[#f8f9fa] dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-800 text-gray-500 dark:text-gray-400 font-semibold uppercase text-[12px] tracking-wider">
                 <th className="px-6 py-4">Image</th>
                 <th className="px-6 py-4">Feature Name</th>
                 <th className="px-6 py-4">Slug</th>
@@ -136,13 +136,13 @@ export default function AdminFeaturesPage() {
             <tbody className="divide-y divide-gray-100">
               {isLoading ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500">Loading features...</td>
+                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">Loading features...</td>
                 </tr>
               ) : features.length > 0 ? (
                 features.map((feature) => (
-                  <tr key={feature._id} className="hover:bg-gray-50 transition-colors group">
+                  <tr key={(feature._id || feature.id)} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group">
                     <td className="px-6 py-4 w-20">
-                      <div className="w-12 h-12 bg-gray-50 rounded-lg border border-gray-100 overflow-hidden shadow-sm flex-shrink-0">
+                      <div className="w-12 h-12 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm flex-shrink-0">
                         {feature.image ? (
                           <img src={feature.image} alt={feature.name} className="w-full h-full object-cover" />
                         ) : (
@@ -153,13 +153,13 @@ export default function AdminFeaturesPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-[15px] font-bold text-gray-900">{feature.name}</td>
-                    <td className="px-6 py-4 text-gray-500 text-[13px]">{feature.slug}</td>
+                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-[13px]">{feature.slug}</td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onClick={() => handleOpenModal(feature)} className="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors" title="Edit">
                           <Edit2 size={16} strokeWidth={2.5} />
                         </button>
-                        <button onClick={() => handleDelete(feature._id)} className="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" title="Delete">
+                        <button onClick={() => handleDelete((feature._id || feature.id))} className="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" title="Delete">
                           <Trash2 size={16} strokeWidth={2.5} />
                         </button>
                       </div>
@@ -168,7 +168,7 @@ export default function AdminFeaturesPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500">No features found.</td>
+                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">No features found.</td>
                 </tr>
               )}
             </tbody>
@@ -179,10 +179,10 @@ export default function AdminFeaturesPage() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform transition-all">
-            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform transition-all">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
               <h2 className="text-[18px] font-bold text-gray-900">{editingId ? "Edit Feature" : "Add New Feature"}</h2>
-              <button onClick={handleCloseModal} className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"><X size={20} /></button>
+              <button onClick={handleCloseModal} className="text-gray-400 hover:text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-full transition-colors"><X size={20} /></button>
             </div>
             
             <form onSubmit={handleSubmit}>
@@ -190,27 +190,27 @@ export default function AdminFeaturesPage() {
                 {/* Basic Info */}
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Feature Name *</label>
+                    <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200 mb-1.5">Feature Name *</label>
                     <input 
                       type="text" 
                       required
                       value={formData.name} 
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all"
+                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all"
                       placeholder="e.g. Services"
                     />
                   </div>
 
                   <div>
                     <div className="flex justify-between items-center mb-1.5">
-                      <label className="block text-[13px] font-bold text-gray-700">URL Slug</label>
+                      <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200">URL Slug</label>
                       <span className="text-[11px] text-gray-400">Leave empty to auto-generate</span>
                     </div>
                     <input 
                       type="text" 
                       value={formData.slug} 
                       onChange={(e) => setFormData({...formData, slug: e.target.value})}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all bg-gray-50 focus:bg-white"
+                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all bg-gray-50 dark:bg-gray-800/50 focus:bg-white dark:bg-gray-800"
                       placeholder="e.g. services"
                     />
                   </div>
@@ -219,28 +219,28 @@ export default function AdminFeaturesPage() {
                 {/* Media & Details */}
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Image URL</label>
+                    <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200 mb-1.5">Image URL</label>
                     <input 
                       type="text" 
                       value={formData.image} 
                       onChange={(e) => setFormData({...formData, image: e.target.value})}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all"
+                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all"
                       placeholder="/features/feature.png"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Description</label>
+                    <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200 mb-1.5">Description</label>
                     <textarea 
                       value={formData.description} 
                       onChange={(e) => setFormData({...formData, description: e.target.value})}
                       rows={3}
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all resize-none"
+                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] transition-all resize-none"
                       placeholder="Brief description..."
                     />
                   </div>
                   
-                  <label className="flex items-center gap-3 cursor-pointer p-3 border border-gray-100 rounded-lg bg-gray-50/50 hover:bg-gray-50 transition-colors">
+                  <label className="flex items-center gap-3 cursor-pointer p-3 border border-gray-100 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div className="relative">
                       <input 
                         type="checkbox" 
@@ -248,21 +248,21 @@ export default function AdminFeaturesPage() {
                         onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
                         className="sr-only peer"
                       />
-                      <div className="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#186675]"></div>
+                      <div className="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-gray-800 after:border-gray-300 dark:border-gray-600 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#186675] dark:bg-gray-950"></div>
                     </div>
                     <div>
-                      <div className="text-[14px] font-bold text-gray-800">Active Status</div>
-                      <div className="text-[12px] text-gray-500">Visible to customers</div>
+                      <div className="text-[14px] font-bold text-gray-800 dark:text-gray-100">Active Status</div>
+                      <div className="text-[12px] text-gray-500 dark:text-gray-400">Visible to customers</div>
                     </div>
                   </label>
                 </div>
               </div>
               
-              <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end gap-3 rounded-b-2xl">
+              <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 flex justify-end gap-3 rounded-b-2xl">
                 <button 
                   type="button" 
                   onClick={handleCloseModal}
-                  className="px-6 py-2.5 text-[14px] font-medium text-gray-600 hover:bg-gray-200 bg-gray-100 rounded-lg transition-colors"
+                  className="px-6 py-2.5 text-[14px] font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 bg-gray-100 rounded-lg transition-colors"
                 >
                   Cancel
                 </button>

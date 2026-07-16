@@ -108,7 +108,7 @@ export default function AdminOffersPage() {
         discountPercent: Number(discountPercent)
       };
       
-      const res = await updateProduct(selectedProduct._id, updatedData);
+      const res = await updateProduct((selectedProduct._id || selectedProduct.id), updatedData);
       if (res.data.success) {
         toast.success("Offer applied successfully");
         setIsModalOpen(false);
@@ -138,7 +138,7 @@ export default function AdminOffersPage() {
         discountPercent: 0
       };
       
-      const res = await updateProduct(product._id, updatedData);
+      const res = await updateProduct((product._id || product.id), updatedData);
       if (res.data.success) {
         toast.success("Offer removed successfully");
         fetchOffers();
@@ -150,10 +150,10 @@ export default function AdminOffersPage() {
 
   return (
     <div className="space-y-6 pb-20">
-      <div className="flex justify-between items-center pb-6 border-b border-gray-100">
+      <div className="flex justify-between items-center pb-6 border-b border-gray-100 dark:border-gray-800">
         <div>
           <h1 className="text-[24px] font-bold text-gray-900 tracking-tight">Active Offers</h1>
-          <p className="text-[14px] text-gray-500 mt-1">Manage products currently on sale or discount.</p>
+          <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-1">Manage products currently on sale or discount.</p>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
@@ -164,24 +164,24 @@ export default function AdminOffersPage() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12 text-gray-500 animate-pulse">Loading offers...</div>
+        <div className="text-center py-12 text-gray-500 dark:text-gray-400 animate-pulse">Loading offers...</div>
       ) : offers.length === 0 ? (
-        <div className="text-center py-16 bg-white border border-gray-200 border-dashed rounded-xl">
+        <div className="text-center py-16 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 border-dashed rounded-xl">
           <BadgePercent size={48} className="mx-auto text-gray-300 mb-4" />
           <h3 className="text-[18px] font-bold text-gray-900">No Active Offers</h3>
-          <p className="text-[14px] text-gray-500 mt-2 mb-6">You don't have any products currently on sale.</p>
+          <p className="text-[14px] text-gray-500 dark:text-gray-400 mt-2 mb-6">You don't have any products currently on sale.</p>
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="bg-[#186675]/10 text-[#186675] hover:bg-[#186675]/20 px-6 py-2.5 rounded-lg text-[14px] font-bold inline-flex items-center gap-2 transition-colors"
+            className="bg-[#186675] dark:bg-gray-950/10 text-[#186675] hover:bg-[#186675] dark:bg-gray-950/20 px-6 py-2.5 rounded-lg text-[14px] font-bold inline-flex items-center gap-2 transition-colors"
           >
             <Plus size={18} /> Create First Offer
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-[14px]">
-              <thead className="bg-gray-50/80 text-gray-500 text-[11px] uppercase tracking-wider font-bold">
+              <thead className="bg-gray-50 dark:bg-gray-800/50/80 text-gray-500 dark:text-gray-400 text-[11px] uppercase tracking-wider font-bold">
                 <tr>
                   <th className="px-6 py-4">Product</th>
                   <th className="px-6 py-4">Original Price</th>
@@ -192,10 +192,10 @@ export default function AdminOffersPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {offers.map((product) => (
-                  <tr key={product._id} className="hover:bg-gray-50/50 transition-colors">
+                  <tr key={(product._id || product.id)} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded border border-gray-200 overflow-hidden bg-gray-50 relative flex-shrink-0">
+                        <div className="w-10 h-10 rounded border border-gray-200 dark:border-gray-700 overflow-hidden bg-gray-50 dark:bg-gray-800/50 relative flex-shrink-0">
                           {product.thumbnail ? (
                             <Image src={product.thumbnail} alt={product.name} fill className="object-cover" />
                           ) : (
@@ -204,11 +204,11 @@ export default function AdminOffersPage() {
                         </div>
                         <div>
                           <div className="font-bold text-gray-900 line-clamp-1">{product.name}</div>
-                          <div className="text-[12px] text-gray-500">SKU: {product.sku}</div>
+                          <div className="text-[12px] text-gray-500 dark:text-gray-400">SKU: {product.sku}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-gray-500 line-through">
+                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400 line-through">
                       ৳{product.originalPrice || product.price}
                     </td>
                     <td className="px-6 py-4 font-bold text-[#186675]">
@@ -239,10 +239,10 @@ export default function AdminOffersPage() {
       {/* Add Offer Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-xl animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex justify-between items-center p-5 border-b border-gray-100">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-center p-5 border-b border-gray-100 dark:border-gray-800">
               <h2 className="text-[18px] font-bold text-gray-900">Add Product to Offer</h2>
-              <button onClick={() => { setIsModalOpen(false); setSelectedProduct(null); setSearchQuery(""); }} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => { setIsModalOpen(false); setSelectedProduct(null); setSearchQuery(""); }} className="text-gray-400 hover:text-gray-600 dark:text-gray-300">
                 <X size={20} />
               </button>
             </div>
@@ -257,26 +257,26 @@ export default function AdminOffersPage() {
                       placeholder="Search product by name or SKU..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] text-[14px]"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] text-[14px]"
                     />
                   </div>
                   
                   <div className="max-h-[300px] overflow-y-auto space-y-2">
                     {isSearching ? (
-                      <div className="text-center py-4 text-gray-500 text-[13px]">Searching...</div>
+                      <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-[13px]">Searching...</div>
                     ) : searchResults.length > 0 ? (
                       searchResults.map((product) => (
                         <div 
-                          key={product._id} 
+                          key={(product._id || product.id)} 
                           onClick={() => setSelectedProduct(product)}
-                          className="flex items-center gap-3 p-3 border border-gray-100 rounded-lg hover:border-[#186675] hover:bg-[#186675]/5 cursor-pointer transition-colors"
+                          className="flex items-center gap-3 p-3 border border-gray-100 dark:border-gray-800 rounded-lg hover:border-[#186675] hover:bg-[#186675] dark:bg-gray-950/5 cursor-pointer transition-colors"
                         >
-                          <div className="w-12 h-12 rounded border border-gray-200 overflow-hidden relative flex-shrink-0">
+                          <div className="w-12 h-12 rounded border border-gray-200 dark:border-gray-700 overflow-hidden relative flex-shrink-0">
                             {product.thumbnail && <Image src={product.thumbnail} alt={product.name} fill className="object-cover" />}
                           </div>
                           <div className="flex-1">
                             <div className="font-bold text-[14px] text-gray-900 line-clamp-1">{product.name}</div>
-                            <div className="text-[12px] text-gray-500 flex justify-between">
+                            <div className="text-[12px] text-gray-500 dark:text-gray-400 flex justify-between">
                               <span>SKU: {product.sku}</span>
                               <span className="font-bold text-[#186675]">৳{product.price}</span>
                             </div>
@@ -284,40 +284,40 @@ export default function AdminOffersPage() {
                         </div>
                       ))
                     ) : searchQuery.trim().length > 1 ? (
-                      <div className="text-center py-4 text-gray-500 text-[13px]">No products found</div>
+                      <div className="text-center py-4 text-gray-500 dark:text-gray-400 text-[13px]">No products found</div>
                     ) : null}
                   </div>
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <div className="flex items-center gap-4 p-4 bg-gray-50 border border-gray-100 rounded-xl">
-                    <div className="w-16 h-16 rounded border border-gray-200 overflow-hidden relative flex-shrink-0 bg-white">
+                  <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-xl">
+                    <div className="w-16 h-16 rounded border border-gray-200 dark:border-gray-700 overflow-hidden relative flex-shrink-0 bg-white dark:bg-gray-800">
                       {selectedProduct.thumbnail && <Image src={selectedProduct.thumbnail} alt={selectedProduct.name} fill className="object-cover" />}
                     </div>
                     <div className="flex-1">
                       <div className="font-bold text-[15px] text-gray-900">{selectedProduct.name}</div>
-                      <div className="text-[13px] text-gray-500 mt-1">Current Price: <span className="font-bold text-gray-900 line-through">৳{selectedProduct.price}</span></div>
+                      <div className="text-[13px] text-gray-500 dark:text-gray-400 mt-1">Current Price: <span className="font-bold text-gray-900 line-through">৳{selectedProduct.price}</span></div>
                     </div>
                     <button onClick={() => setSelectedProduct(null)} className="text-[12px] text-[#186675] font-bold hover:underline">Change</button>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Discount (%)</label>
+                      <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200 mb-1.5">Discount (%)</label>
                       <div className="relative">
                         <input 
                           type="number" 
                           min="0" max="100"
                           value={discountPercent}
                           onChange={(e) => handlePercentChange(e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg pl-4 pr-8 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675]"
+                          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg pl-4 pr-8 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675]"
                           placeholder="e.g. 20"
                         />
                         <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">%</span>
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[13px] font-bold text-gray-700 mb-1.5">New Offer Price (৳)</label>
+                      <label className="block text-[13px] font-bold text-gray-700 dark:text-gray-200 mb-1.5">New Offer Price (৳)</label>
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">৳</span>
                         <input 
@@ -325,7 +325,7 @@ export default function AdminOffersPage() {
                           min="0"
                           value={offerPrice}
                           onChange={(e) => handlePriceChange(e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] font-bold text-[#186675]"
+                          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg pl-8 pr-4 py-2.5 text-[14px] outline-none focus:ring-2 focus:ring-[#186675]/20 focus:border-[#186675] font-bold text-[#186675]"
                           placeholder="e.g. 400"
                         />
                       </div>
@@ -335,7 +335,7 @@ export default function AdminOffersPage() {
                   <button 
                     onClick={handleAddOffer}
                     disabled={isSubmitting || !offerPrice}
-                    className="w-full bg-[#186675] hover:bg-[#13525e] text-white py-3 rounded-xl font-bold transition-colors disabled:opacity-50"
+                    className="w-full bg-[#186675] dark:bg-gray-950 hover:bg-[#13525e] dark:bg-gray-800 text-white py-3 rounded-xl font-bold transition-colors disabled:opacity-50"
                   >
                     {isSubmitting ? "Applying Offer..." : "Apply Offer"}
                   </button>
