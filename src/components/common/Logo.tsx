@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
@@ -28,11 +28,11 @@ export default function Logo({ className, size = "md", variant = "default" }: Lo
       </svg>
 
       {/* Text */}
-      <div className="flex flex-col leading-tight">
+      <div className="hidden sm:flex flex-col leading-tight">
         <span className={cn("font-bold tracking-tight group-hover:opacity-90 transition-opacity", s.text, textColor)}>
-          Décor<span style={{ color: "var(--accent)" }}>Culture</span>
+          Decor<span style={{ color: "var(--accent)" }}>Culture</span>
         </span>
-        <span className={cn("text-[10px] tracking-wide", variant === "white" ? "text-white/60" : "text-[var(--muted-foreground)]")}>
+        <span className={cn("text-[10px] tracking-wide whitespace-normal sm:whitespace-nowrap max-w-[130px] sm:max-w-none", variant === "white" ? "text-white/60" : "text-[var(--muted-foreground)]")}>
           Delivering Quality, Ensuring Satisfaction
         </span>
       </div>

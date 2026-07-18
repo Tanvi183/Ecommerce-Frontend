@@ -14,13 +14,15 @@ import { cn, formatPrice } from "@/lib/utils";
 import Swal from "sweetalert2";
 import api from "@/lib/api";
 import { getSettings } from "@/lib/adminApi";
+import MobileNav from "./MobileNav";
 
 interface NavbarProps {
   onCartOpen?: () => void;
-  onMobileNavOpen?: () => void;
 }
 
-export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
+export default function Navbar({ onCartOpen }: NavbarProps) {
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [searchCategory, setSearchCategory] = useState("All");
   const pathname = usePathname();
@@ -101,11 +103,25 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
 
   return (
     <header id="main-navbar" className="w-full bg-[var(--background)] border-b border-[var(--border)]">
+      {/* Mobile Top bar (Login / Register) */}
+      <div className="lg:hidden bg-white border-b border-[#e5e5e5] py-2">
+        <Container className="flex items-center gap-4 sm:gap-6">
+          <Link href={ROUTES.login} className="flex items-center gap-1.5 text-[#666] text-xs font-bold hover:text-[var(--primary)] transition-colors">
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+            LOGIN
+          </Link>
+          <Link href={ROUTES.register} className="flex items-center gap-1.5 text-[#666] text-xs font-bold hover:text-[var(--primary)] transition-colors">
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
+            REGISTER
+          </Link>
+        </Container>
+      </div>
+
       {/* ── Top row ── */}
       <div className="bg-[var(--background)] py-4">
-        <Container className="flex items-center justify-between gap-6">
+        <Container className="flex items-center justify-between gap-2 sm:gap-4 lg:gap-6">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 scale-[0.85] sm:scale-100 origin-left">
             <Logo size="md" />
           </div>
 
@@ -169,7 +185,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
           </div>
 
           {/* Utility blocks */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-5 lg:gap-6">
             {/* Call */}
             <div className="hidden lg:flex items-center gap-2">
               <div className="text-[#186675]">
@@ -185,8 +201,15 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
               </div>
             </div>
 
+            {/* Search (Mobile Only) */}
+            <button className="lg:hidden p-1 text-[#186675]" onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}>
+              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
+              </svg>
+            </button>
+
             {/* Wishlist */}
-            <Link href={ROUTES.wishlist} className="hidden lg:flex items-center gap-2 group">
+            <Link href={ROUTES.wishlist} className="flex items-center gap-2 group">
               <div className="relative flex items-center mt-1">
                 <svg width="26" height="26" fill="none" stroke="#186675" strokeWidth="1.5" viewBox="0 0 24 24" className="group-hover:stroke-[var(--primary)] transition-colors">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -196,11 +219,29 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                   {wishlistCount}
                 </span>
               </div>
-              <div className="ml-2">
+              <div className="ml-2 hidden lg:block">
                 <div className="text-sm font-bold text-[#186675] leading-tight group-hover:text-[var(--primary)] transition-colors">Wishlist</div>
                 <div className="text-[11px] text-[#666]">Edit Your Wishlist</div>
               </div>
             </Link>
+
+            {/* Cart (Mobile Only) */}
+            <Link href={ROUTES.cart} className="lg:hidden flex items-center relative p-1 text-[#186675]">
+              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                <rect x="4" y="7" width="16" height="14" rx="1.5" />
+                <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+              </svg>
+              <span className="absolute -top-1 -right-1 bg-[#e11b22] text-white text-[10px] font-bold min-w-[16px] h-[16px] px-1 rounded-full flex items-center justify-center leading-none border border-white">
+                {cartCount}
+              </span>
+            </Link>
+
+            {/* Hamburger for mobile */}
+            <button onClick={() => setIsMobileNavOpen(true)} className="lg:hidden p-1 text-[#333]">
+              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
 
             {/* Account */}
             <div className="hidden lg:flex items-center gap-2 group relative cursor-pointer z-50">
@@ -262,15 +303,66 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                 )}
               </div>
             </div>
-
-            {/* Hamburger for mobile */}
-            <button onClick={onMobileNavOpen} className="lg:hidden p-2 text-[#666]">
-              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            </button>
           </div>
         </Container>
+
+        {/* Mobile Search Bar Expandable */}
+        {isMobileSearchOpen && (
+          <div className="md:hidden px-4 pt-1 pb-4 w-full bg-[var(--background)]">
+            <div className="flex w-full h-[44px] rounded-[22px] overflow-hidden border-2 border-[#186675]">
+              {/* Custom Category Dropdown */}
+              <div className="relative h-full flex-shrink-0 group z-50">
+                <div className="h-full bg-[#186675] text-white text-[14px] pl-4 pr-8 flex items-center cursor-pointer font-semibold">
+                  {searchCategory}
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-white">
+                    <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z" /></svg>
+                  </div>
+                </div>
+
+                {/* Dropdown Menu */}
+                <div className="absolute top-full left-0 pt-[8px] w-[180px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                  <div className="bg-[#186675] shadow-xl relative rounded-sm">
+                    {/* Triangle Pointer */}
+                    <div className="absolute -top-[6px] left-6 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-[#186675]"></div>
+
+                    <ul className="py-2">
+                      {["All", "Blind", "Floor Item", "Glass Paper", "Kitchen Item", "Others Feature", "Wall Panel", "Wallpaper"].map(cat => (
+                        <li key={cat}>
+                          <button
+                            type="button"
+                            onClick={() => setSearchCategory(cat)}
+                            className="w-full text-left px-5 py-2.5 text-[14px] text-white hover:bg-[#155a68] transition-colors"
+                          >
+                            {cat}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Input */}
+              <input
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search here..."
+                className="flex-1 h-full px-4 text-[15px] outline-none bg-[#f4f6f8] text-[#333] placeholder:text-[#888]"
+              />
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="h-full bg-[#186675] text-white px-5 hover:bg-[#13525e] transition-colors flex items-center justify-center"
+              >
+                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ── Nav links row ── */}
@@ -357,7 +449,7 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
                     {cartItems.map((item) => (
                       <div key={item.id} className="flex items-center gap-3 p-3 border-b border-[#e5e5e5] bg-white">
                         <Link href={ROUTES.productDetail(item.product.slug)} className="flex-shrink-0 w-[60px] h-[60px] border border-[#e5e5e5] relative">
-                          <Image src={item.product.thumbnail} alt={item.product.name} fill className="object-cover p-1" />
+                          <Image src={item.product.thumbnail} alt={item.product.name} fill sizes="64px" className="object-cover p-1" />
                         </Link>
                         <div className="flex-1 min-w-0">
                           <Link href={ROUTES.productDetail(item.product.slug)} className="text-[13px] text-[#186675] hover:underline font-bold truncate block">
@@ -420,6 +512,8 @@ export default function Navbar({ onCartOpen, onMobileNavOpen }: NavbarProps) {
 
         </Container>
       </div>
+
+      <MobileNav open={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
     </header>
   );
 }

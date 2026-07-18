@@ -54,6 +54,6 @@ export const deleteReview = (id: string) => api.delete(`/reviews/${id}`);
 // Schedules
 export const getSchedules = () => api.get('/schedules');
 export const createSchedule = (data: any) => api.post('/schedules', data);
-export const deleteSchedule = (id: string) => api.delete(/schedules/);
+export const deleteSchedule = (id: string) => api.delete(`/schedules/${id}`);
 
-export const updateSchedule = (id: string, data: any) => api.put(/schedules/, data);
+export const updateSchedule = (id: string, data: any) => api.put(`/schedules/${id}`, data);

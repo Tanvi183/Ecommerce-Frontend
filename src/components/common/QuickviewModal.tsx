@@ -140,7 +140,7 @@ export default function QuickviewModal({ product, isOpen, onClose }: QuickviewMo
                 onClick={() => setActiveImage(img)}
                 className={`relative w-[80px] h-[80px] border ${activeImage === img ? 'border-[#277b8c]' : 'border-gray-200'} bg-gray-50 hover:border-[#277b8c] transition-colors cursor-pointer`}
               >
-                <Image src={img} alt="" fill className="object-cover" />
+                <Image src={img} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
               </button>
             ))}
           </div>

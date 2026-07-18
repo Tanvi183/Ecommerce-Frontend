@@ -21,13 +21,13 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Décor Culture | Premium Wallpaper, Flooring & Interior Decor",
+  title: "Decor Culture | Premium Wallpaper, Flooring & Interior Decor",
   description:
-    "Décor Culture offers premium wallpapers, luxury flooring, elegant window blinds, glass paper, wall panels, kitchen stickers and more. Transform your space with quality interior décor products.",
-  keywords: "wallpaper, flooring, window blind, wall panel, glass paper, interior décor, Dhaka",
+    "Decor Culture offers premium wallpapers, luxury flooring, elegant window blinds, glass paper, wall panels, kitchen stickers and more. Transform your space with quality interior decor products.",
+  keywords: "wallpaper, flooring, window blind, wall panel, glass paper, interior decor, Dhaka",
   openGraph: {
-    title: "Décor Culture | Premium Interior Décor",
-    description: "Delivering Quality, Ensuring Satisfaction — Shop premium home décor products online.",
+    title: "Decor Culture | Premium Interior Decor",
+    description: "Delivering Quality, Ensuring Satisfaction - Shop premium home decor products online.",
     type: "website",
   },
 };
@@ -39,10 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn(inter.variable, poppins.variable)} suppressHydrationWarning data-scroll-behavior="smooth">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-      </head>
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen" suppressHydrationWarning>
         <Providers>
           <Navbar />
           <main className="flex-1">

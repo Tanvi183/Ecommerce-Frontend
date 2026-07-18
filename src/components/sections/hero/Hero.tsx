@@ -41,7 +41,7 @@ export default function Hero() {
               src={src} 
               alt={`Decor Culture Banner ${index + 1}`}
               fill
-              priority={index === 0}
+              priority={true}
               className="object-cover"
             />
             {/* Overlay text - only show on the first slide or keep static? The reference just had images. We will keep it static over all slides for now, or just on the first. Let's put it on all slides to keep the text visible. */}
