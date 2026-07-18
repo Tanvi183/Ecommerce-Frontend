@@ -73,7 +73,7 @@ export default function ProductCard({ product, className, viewMode = "grid" }: P
       <div className={cn("bg-white border border-[#e5e5e5] flex flex-col sm:flex-row h-full group hover:border-[#186675] transition-colors", className)}>
         {/* Image container */}
         <div className="relative block overflow-hidden aspect-square sm:aspect-auto sm:w-[250px] sm:h-[250px] bg-gray-50 flex-shrink-0">
-          <Link href={ROUTES.productDetail(product.slug)} className="block w-full h-full">
+          <Link href={ROUTES.productDetail(product.slug)} className="relative block w-full h-full">
             <Image
               src={product.thumbnail}
               alt={product.name}
@@ -173,7 +173,7 @@ export default function ProductCard({ product, className, viewMode = "grid" }: P
     <div className={cn("bg-white border border-[#e5e5e5] flex flex-col h-full group hover:border-[#186675] transition-colors", className)}>
       {/* Image container */}
       <div className="relative block overflow-hidden aspect-square bg-gray-50 border-b border-[#e5e5e5]">
-        <Link href={ROUTES.productDetail(product.slug)} className="block w-full h-full">
+        <Link href={ROUTES.productDetail(product.slug)} className="relative block w-full h-full">
           <Image
             src={product.thumbnail}
             alt={product.name}

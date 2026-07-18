@@ -7,7 +7,7 @@ import Container from "@/components/common/Container";
 const POPULAR_CATEGORIES = [
   { id: "1", name: "SPC Floor", image: "/floor_category.png" },
   { id: "2", name: "Floor Carpet", image: "/wallpaper_category.png" },
-  { id: "3", name: "Wooden Floor", image: "/kitchen_category.png" },
+  { id: "3", name: "Wooden Floor", image: "/kitchen_sticker_category.png" },
   { id: "4", name: "Vinyl Floor", image: "/floor_category.png" },
 ];
 
@@ -45,6 +45,7 @@ export default function PopularCategory() {
                       src={category.image}
                       alt={category.name}
                       fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
