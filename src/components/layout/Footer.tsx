@@ -19,7 +19,7 @@ export default function Footer() {
           setServices(res.data.data.footer.services);
         }
       } catch (error) {
-        console.error("Failed to load footer settings", error);
+        console.warn("Failed to load footer settings", error);
       }
     };
     fetchFooterData();

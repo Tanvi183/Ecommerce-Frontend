@@ -46,7 +46,7 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
           setNavLinks(res.data.data.navLinks);
         }
       } catch (error) {
-        console.error("Failed to load nav links", error);
+        console.warn("Failed to load nav links", error);
       }
     };
     fetchNavLinks();
@@ -84,7 +84,7 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
       clearAuth();
       window.location.href = ROUTES.login;
     } catch (error) {
-      console.error("Failed to logout", error);
+      console.warn("Failed to logout", error);
     }
   };
 
