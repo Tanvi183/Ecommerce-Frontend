@@ -29,7 +29,7 @@ export default function Hero() {
   return (
     <section id="hero-banner" className="w-full">
       {/* Main Banner Slider */}
-      <div className="relative w-full aspect-[21/9] md:aspect-[3/1] max-h-[500px] overflow-hidden group">
+      <div className="relative w-full aspect-[16/9] md:aspect-[21/9] max-h-[650px] overflow-hidden group">
         {SLIDES.map((src, index) => (
           <div
             key={index}

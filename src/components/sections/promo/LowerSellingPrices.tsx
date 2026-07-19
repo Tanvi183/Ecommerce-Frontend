@@ -49,6 +49,8 @@ export default function LowerSellingPrices() {
                     src={src} 
                     alt={`Promo ${i + 1}`}
                     fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    priority={i < 4}
                     className="object-cover hover:scale-105 transition-transform duration-500"
                   />
                 </div>

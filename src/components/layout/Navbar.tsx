@@ -340,8 +340,13 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
 
         {/* Mobile Search Bar Expandable */}
         {isMobileSearchOpen && (
-          <div className="md:hidden px-4 pt-1 pb-4 w-full bg-[var(--background)]">
-            <form onSubmit={handleSearch} className="flex w-full h-[44px] rounded-[22px] border-2 border-[#186675]">
+          <div className="lg:hidden w-full">
+            <div
+              className="fixed inset-0 z-40"
+              onClick={() => setIsMobileSearchOpen(false)}
+            />
+            <div className="md:hidden px-4 pt-1 pb-4 w-full bg-[var(--background)] relative z-50">
+              <form onSubmit={handleSearch} className="flex w-full h-[44px] rounded-[22px] border-2 border-[#186675]">
               {/* Custom Category Dropdown */}
               <div className="relative h-full flex-shrink-0 z-50">
                 <div
@@ -399,6 +404,7 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
                 </svg>
               </button>
             </form>
+          </div>
           </div>
         )}
       </div>
