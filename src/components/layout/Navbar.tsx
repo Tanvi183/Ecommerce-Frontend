@@ -6,7 +6,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Container from "@/components/common/Container";
 import Logo from "@/components/common/Logo";
 import { ROUTES } from "@/constants/routes";
@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import api from "@/lib/api";
 import { getSettings } from "@/lib/adminApi";
 import MobileNav from "./MobileNav";
+import CategoryDrawer from "./CategoryDrawer";
 
 interface NavbarProps {
   onCartOpen?: () => void;
@@ -23,10 +24,27 @@ interface NavbarProps {
 export default function Navbar({ onCartOpen }: NavbarProps) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [searchCategory, setSearchCategory] = useState("All");
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const [navLinks, setNavLinks] = useState<any[]>([]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!search.trim()) return;
+
+    const query = new URLSearchParams();
+    query.set("search", search.trim());
+    if (searchCategory !== "All") {
+      query.set("category", searchCategory);
+    }
+
+    router.push(`${ROUTES.products}?${query.toString()}`);
+    setIsMobileSearchOpen(false);
+  };
 
   // Hydration-safe store reads
   const [isMounted, setIsMounted] = useState(false);
@@ -96,7 +114,7 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
   const totalPrice = isMounted ? cartTotalPrice : 0;
   const cartItems = isMounted ? cartItemsStore : [];
   const wishlistCount = isMounted ? wishlistItems.length : 0;
-  
+
   const accountLinkRoute = isAuthenticated ? (user?.role === "ADMIN" ? "/admin" : ROUTES.profile) : ROUTES.login;
 
   if (pathname.startsWith('/admin')) return null;
@@ -117,8 +135,16 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
         </Container>
       </div>
 
+      {/* Global Click Outside Backdrop for Category */}
+      {isCategoryOpen && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setIsCategoryOpen(false)}
+        />
+      )}
+
       {/* ── Top row ── */}
-      <div className="bg-[var(--background)] py-4">
+      <div className="bg-[var(--background)] py-4 relative z-50">
         <Container className="flex items-center justify-between gap-2 sm:gap-4 lg:gap-6">
           {/* Logo */}
           <div className="flex-shrink-0 scale-[0.85] sm:scale-100 origin-left">
@@ -127,10 +153,13 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
 
           {/* Search bar */}
           <div className="flex-1 hidden md:flex max-w-2xl mx-auto px-4 xl:px-8">
-            <div className="flex w-full h-[40px] rounded-[12px] overflow-hidden">
+            <form onSubmit={handleSearch} className="flex w-full h-[40px] rounded-[12px]">
               {/* Custom Category Dropdown */}
-              <div className="relative h-full flex-shrink-0 group z-50">
-                <div className="h-full bg-[#186675] text-white text-[14px] pl-5 pr-8 flex items-center cursor-pointer">
+              <div className="relative h-full flex-shrink-0 z-50">
+                <div
+                  className="h-full bg-[#186675] text-white text-[14px] pl-5 pr-8 flex items-center cursor-pointer rounded-l-[12px]"
+                  onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                >
                   {searchCategory}
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 text-white">
                     <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z" /></svg>
@@ -138,7 +167,7 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
                 </div>
 
                 {/* Dropdown Menu */}
-                <div className="absolute top-full left-0 pt-[8px] w-[180px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <div className={`absolute top-full left-0 pt-[8px] w-[180px] transition-all ${isCategoryOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
                   <div className="bg-[#186675] shadow-xl relative rounded-sm">
                     {/* Triangle Pointer */}
                     <div className="absolute -top-[6px] left-6 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-[#186675]"></div>
@@ -148,7 +177,10 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
                         <li key={cat}>
                           <button
                             type="button"
-                            onClick={() => setSearchCategory(cat)}
+                            onClick={() => {
+                              setSearchCategory(cat);
+                              setIsCategoryOpen(false);
+                            }}
                             className="w-full text-left px-5 py-2.5 text-[14px] text-white hover:bg-[#155a68] transition-colors"
                           >
                             {cat}
@@ -174,14 +206,14 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
               <button
                 id="search-submit-btn"
                 type="submit"
-                className="h-full bg-[#186675] text-white px-6 hover:bg-[#13525e] transition-colors flex items-center justify-center"
+                className="h-full bg-[#186675] text-white px-6 hover:bg-[#13525e] transition-colors flex items-center justify-center rounded-r-[12px]"
                 aria-label="Search"
               >
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
                 </svg>
               </button>
-            </div>
+            </form>
           </div>
 
           {/* Utility blocks */}
@@ -276,7 +308,7 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
                       </svg>
                       <span className="font-bold text-[13px]">{user?.role === "ADMIN" ? "Admin Dashboard" : "My Profile"}</span>
                     </Link>
-                    <button onClick={handleLogout} 
+                    <button onClick={handleLogout}
                       className="flex w-full items-center gap-2 px-4 py-3 hover:bg-[#13525e] transition-colors cursor-pointer"
                     >
                       <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -309,10 +341,13 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
         {/* Mobile Search Bar Expandable */}
         {isMobileSearchOpen && (
           <div className="md:hidden px-4 pt-1 pb-4 w-full bg-[var(--background)]">
-            <div className="flex w-full h-[44px] rounded-[22px] overflow-hidden border-2 border-[#186675]">
+            <form onSubmit={handleSearch} className="flex w-full h-[44px] rounded-[22px] border-2 border-[#186675]">
               {/* Custom Category Dropdown */}
-              <div className="relative h-full flex-shrink-0 group z-50">
-                <div className="h-full bg-[#186675] text-white text-[14px] pl-4 pr-8 flex items-center cursor-pointer font-semibold">
+              <div className="relative h-full flex-shrink-0 z-50">
+                <div
+                  className="h-full bg-[#186675] text-white text-[14px] pl-4 pr-8 flex items-center cursor-pointer font-semibold rounded-l-[20px]"
+                  onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                >
                   {searchCategory}
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 text-white">
                     <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z" /></svg>
@@ -320,7 +355,7 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
                 </div>
 
                 {/* Dropdown Menu */}
-                <div className="absolute top-full left-0 pt-[8px] w-[180px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <div className={`absolute top-full left-0 pt-[8px] w-[180px] transition-all ${isCategoryOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
                   <div className="bg-[#186675] shadow-xl relative rounded-sm">
                     {/* Triangle Pointer */}
                     <div className="absolute -top-[6px] left-6 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-[#186675]"></div>
@@ -330,7 +365,10 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
                         <li key={cat}>
                           <button
                             type="button"
-                            onClick={() => setSearchCategory(cat)}
+                            onClick={() => {
+                              setSearchCategory(cat);
+                              setIsCategoryOpen(false);
+                            }}
                             className="w-full text-left px-5 py-2.5 text-[14px] text-white hover:bg-[#155a68] transition-colors"
                           >
                             {cat}
@@ -354,165 +392,164 @@ export default function Navbar({ onCartOpen }: NavbarProps) {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="h-full bg-[#186675] text-white px-5 hover:bg-[#13525e] transition-colors flex items-center justify-center"
+                className="h-full bg-[#186675] text-white px-5 hover:bg-[#13525e] transition-colors flex items-center justify-center rounded-r-[20px]"
               >
                 <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
                 </svg>
               </button>
-            </div>
+            </form>
           </div>
         )}
       </div>
 
       {/* ── Nav links row ── */}
-      <div className="hidden lg:block bg-white border-t border-b border-[#e5e5e5] relative">
+      <div className="hidden lg:block bg-[#E9F0F8] relative z-[60]">
         <Container className="flex justify-between items-center relative h-[50px]">
 
+          {/* All Categories Button */}
+          <div className="flex items-center h-full mr-6 ml-2">
+            <button
+              onClick={() => setIsDrawerOpen(true)}
+              className="bg-[#186675] text-white pr-3 pl-1 py-1 rounded-full font-bold text-[14px] flex items-center gap-3 hover:bg-[#13505c] transition-colors shadow-sm"
+            >
+              <div className="bg-[#8f6224] text-white w-[32px] h-[32px] rounded-full flex items-center justify-center shadow-sm">
+                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+              </div>
+              All Categories
+            </button>
+          </div>
+
           {/* Main Links */}
-          <nav className="flex-1 flex justify-between items-center h-full pr-6">
-            {navLinks.map((link) => {
+          <nav className="flex-1 flex justify-center items-center gap-6 xl:gap-8 h-full">
+            {[
+              { href: "/", label: "Home" },
+              { href: "/about", label: "About" },
+              { href: "/products", label: "Products" },
+              { href: "/projects", label: "Projects" },
+              { href: "/reviews", label: "Client Reviews" },
+              { href: "/blog", label: "Blog" },
+            ].map((link) => {
               const isActive = pathname === link.href;
               return (
-                <div key={link.href} className="group h-full flex items-center relative">
-                  <Link
-                    href={link.href}
-                    className={cn(
-                      "px-2 xl:px-3 text-[12px] font-sans font-bold transition-colors flex items-center h-full whitespace-nowrap",
-                      link.isOffer
-                        ? "text-[#e11b22]"
-                        : isActive
-                          ? "text-[#186675]"
-                          : "text-[#333333] group-hover:text-[var(--primary)]"
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-
-                  {/* Dropdown Menu */}
-                  {link.subLinks && (
-                    <div className="absolute top-full left-0 bg-white min-w-[220px] shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 border-t border-[#e5e5e5]">
-                      {/* Triangle Pointer */}
-                      <div className="absolute -top-2 left-6 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-[#e5e5e5]"></div>
-                      <div className="absolute -top-[7px] left-6 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-white"></div>
-
-                      <ul className="py-2">
-                        {link.subLinks.map((sub: any) => (
-                          <li key={sub.href}>
-                            <Link
-                              href={sub.href}
-                              className="block px-5 py-2.5 text-[14px] text-[#004f7b] hover:text-[#277b8c] hover:bg-[#f8f9fa] transition-colors"
-                            >
-                              {sub.label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={cn(
+                    "text-[13px] xl:text-[14px] uppercase tracking-wider font-bold transition-colors flex items-center h-full whitespace-nowrap",
+                    isActive ? "text-[#186675]" : "text-[#555] hover:text-[#186675]"
                   )}
-                </div>
+                >
+                  {link.label}
+                </Link>
               );
             })}
           </nav>
 
-          {/* Cart Block */}
-          <div className="flex items-center h-[50px] my-auto pl-4 border-l border-[#e5e5e5] relative group cursor-pointer">
-            <div className="pr-4 h-full flex items-center justify-center">
-              <span className="text-[14px] font-normal text-[#333]">
-                {cartCount} item(s) - {formatPrice(totalPrice)}
-              </span>
-            </div>
-            <Link
-              href={ROUTES.cart}
-              className="bg-[#277b8c] hover:bg-[#186675] text-white h-[50px] px-4 flex items-center justify-center transition-colors relative"
-            >
-              <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                <rect x="4" y="7" width="16" height="14" rx="1.5" />
-                <path d="M8 7V5a4 4 0 0 1 8 0v2" />
-              </svg>
-              {/* Overlapping Badge */}
-              <span className="absolute -top-[6px] -right-[6px] bg-[#e11b22] text-white text-[11px] font-bold min-w-[20px] h-[20px] px-1 rounded-full flex items-center justify-center leading-none border-2 border-white shadow-sm">
-                {cartCount}
-              </span>
-            </Link>
+          <div className="flex items-center gap-5 h-full">
+            {/* Cart Block */}
+            <div className="flex items-center h-[50px] pl-4 border-l border-[#c4d7ea] relative group cursor-pointer">
+              <div className="pr-4 h-full flex items-center justify-center">
+                <span className="text-[14px] font-normal text-[#333]">
+                  {cartCount} item(s) - {formatPrice(totalPrice)}
+                </span>
+              </div>
+              <Link
+                href={ROUTES.cart}
+                className="bg-[#277b8c] hover:bg-[#186675] text-white h-[50px] px-4 flex items-center justify-center transition-colors relative"
+              >
+                <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                  <rect x="4" y="7" width="16" height="14" rx="1.5" />
+                  <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+                </svg>
+                {/* Overlapping Badge */}
+                <span className="absolute -top-[6px] -right-[6px] bg-[#e11b22] text-white text-[11px] font-bold min-w-[20px] h-[20px] px-1 rounded-full flex items-center justify-center leading-none border-2 border-white shadow-sm">
+                  {cartCount}
+                </span>
+              </Link>
 
-            {/* Cart Dropdown */}
-            <div className="absolute top-full left-0 mt-0 w-[350px] bg-[#f8f9fa] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-[#e5e5e5] before:content-[''] before:absolute before:-top-[8px] before:left-24 before:border-[8px] before:border-transparent before:border-b-[#f8f9fa]">
-              {cartCount === 0 ? (
-                <div className="p-6 text-center text-[13px] text-[#666]">
-                  Your shopping cart is empty!
-                </div>
-              ) : (
-                <>
-                  {/* Item List */}
-                  <div className="max-h-[300px] overflow-y-auto">
-                    {cartItems.map((item) => (
-                      <div key={item.id} className="flex items-center gap-3 p-3 border-b border-[#e5e5e5] bg-white">
-                        <Link href={ROUTES.productDetail(item.product.slug)} className="flex-shrink-0 w-[60px] h-[60px] border border-[#e5e5e5] relative">
-                          <Image src={item.product.thumbnail} alt={item.product.name} fill sizes="64px" className="object-cover p-1" />
-                        </Link>
-                        <div className="flex-1 min-w-0">
-                          <Link href={ROUTES.productDetail(item.product.slug)} className="text-[13px] text-[#186675] hover:underline font-bold truncate block">
-                            {item.product.name}
+              {/* Cart Dropdown */}
+              <div className="absolute top-full left-0 mt-0 w-[350px] bg-[#f8f9fa] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-[#e5e5e5] before:content-[''] before:absolute before:-top-[8px] before:left-24 before:border-[8px] before:border-transparent before:border-b-[#f8f9fa]">
+                {cartCount === 0 ? (
+                  <div className="p-6 text-center text-[13px] text-[#666]">
+                    Your shopping cart is empty!
+                  </div>
+                ) : (
+                  <>
+                    {/* Item List */}
+                    <div className="max-h-[300px] overflow-y-auto">
+                      {cartItems.map((item) => (
+                        <div key={item.id} className="flex items-center gap-3 p-3 border-b border-[#e5e5e5] bg-white">
+                          <Link href={ROUTES.productDetail(item.product.slug)} className="flex-shrink-0 w-[60px] h-[60px] border border-[#e5e5e5] relative">
+                            <Image src={item.product.thumbnail} alt={item.product.name} fill sizes="64px" className="object-cover p-1" />
                           </Link>
+                          <div className="flex-1 min-w-0">
+                            <Link href={ROUTES.productDetail(item.product.slug)} className="text-[13px] text-[#186675] hover:underline font-bold truncate block">
+                              {item.product.name}
+                            </Link>
+                          </div>
+                          <div className="text-[13px] text-[#333]">x {item.quantity}</div>
+                          <div className="text-[13px] font-bold text-[#333] w-[60px] text-right">{formatPrice(item.price)}</div>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              removeFromCart(item.id);
+                            }}
+                            className="text-[#d9534f] hover:text-[#c9302c] transition-colors p-1"
+                          >
+                            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                          </button>
                         </div>
-                        <div className="text-[13px] text-[#333]">x {item.quantity}</div>
-                        <div className="text-[13px] font-bold text-[#333] w-[60px] text-right">{formatPrice(item.price)}</div>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            removeFromCart(item.id);
-                          }}
-                          className="text-[#d9534f] hover:text-[#c9302c] transition-colors p-1"
-                        >
-                          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
-                        </button>
+                      ))}
+                    </div>
+
+                    {/* Totals */}
+                    <div className="p-3 bg-[#f8f9fa] border-b border-[#e5e5e5]">
+                      <div className="flex justify-end gap-6 mb-2 text-[13px]">
+                        <span className="font-bold text-[#333]">Sub-Total</span>
+                        <span className="text-[#333] font-bold w-[70px] text-right">{formatPrice(totalPrice)}</span>
                       </div>
-                    ))}
-                  </div>
-
-                  {/* Totals */}
-                  <div className="p-3 bg-[#f8f9fa] border-b border-[#e5e5e5]">
-                    <div className="flex justify-end gap-6 mb-2 text-[13px]">
-                      <span className="font-bold text-[#333]">Sub-Total</span>
-                      <span className="text-[#333] font-bold w-[70px] text-right">{formatPrice(totalPrice)}</span>
+                      <div className="flex justify-end gap-6 text-[13px]">
+                        <span className="font-bold text-[#333]">Total</span>
+                        <span className="text-[#333] font-bold w-[70px] text-right">{formatPrice(totalPrice)}</span>
+                      </div>
                     </div>
-                    <div className="flex justify-end gap-6 text-[13px]">
-                      <span className="font-bold text-[#333]">Total</span>
-                      <span className="text-[#333] font-bold w-[70px] text-right">{formatPrice(totalPrice)}</span>
-                    </div>
-                  </div>
 
-                  {/* Buttons */}
-                  <div className="p-3 bg-[#e9ecef] flex gap-2">
-                    <Link
-                      href={ROUTES.cart}
-                      className="flex-1 bg-[#186675] text-white py-2 flex items-center justify-center gap-2 hover:bg-[#13525e] transition-colors text-[13px] font-bold"
-                    >
-                      <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" />
-                      </svg>
-                      View Cart
-                    </Link>
-                    <Link
-                      href={ROUTES.checkout}
-                      className="flex-1 bg-[#186675] text-white py-2 flex items-center justify-center gap-2 hover:bg-[#13525e] transition-colors text-[13px] font-bold"
-                    >
-                      Checkout
-                      <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  </div>
-                </>
-              )}
+                    {/* Buttons */}
+                    <div className="p-3 bg-[#e9ecef] flex gap-2">
+                      <Link
+                        href={ROUTES.cart}
+                        className="flex-1 bg-[#186675] text-white py-2 flex items-center justify-center gap-2 hover:bg-[#13525e] transition-colors text-[13px] font-bold"
+                      >
+                        <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" />
+                        </svg>
+                        View Cart
+                      </Link>
+                      <Link
+                        href={ROUTES.checkout}
+                        className="flex-1 bg-[#186675] text-white py-2 flex items-center justify-center gap-2 hover:bg-[#13525e] transition-colors text-[13px] font-bold"
+                      >
+                        Checkout
+                        <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
+
 
         </Container>
       </div>
 
+      <CategoryDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
       <MobileNav open={isMobileNavOpen} onClose={() => setIsMobileNavOpen(false)} />
     </header>
   );

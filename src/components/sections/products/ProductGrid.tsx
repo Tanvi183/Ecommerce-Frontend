@@ -8,9 +8,33 @@ import { dummyProducts } from "@/constants/dummyProducts";
 function ProductGridInner() {
   const searchParams = useSearchParams();
   const viewMode = searchParams.get("view") || "grid";
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+  const categoryQuery = searchParams.get("category") || "All";
   
-  // For demo, we just use the first 12 dummy products
-  const products = dummyProducts.slice(0, 12);
+  let products = [...dummyProducts];
+
+  if (searchQuery) {
+    products = products.filter(p => 
+      p.name.toLowerCase().includes(searchQuery) || 
+      p.description.toLowerCase().includes(searchQuery)
+    );
+  }
+
+  if (categoryQuery && categoryQuery !== "All") {
+    const normalizedQuery = categoryQuery.toLowerCase();
+    products = products.filter(p => {
+      const catName = p.category?.name.toLowerCase() || "";
+      
+      if (normalizedQuery === "blind" && catName.includes("blind")) return true;
+      if (normalizedQuery === "kitchen item" && catName.includes("kitchen")) return true;
+      if (normalizedQuery === "others feature" && !["wallpaper", "floor", "blind", "glass", "panel", "kitchen"].some(kw => catName.includes(kw))) return true;
+      
+      return catName.includes(normalizedQuery);
+    });
+  }
+
+  // For demo, we just limit to 12
+  products = products.slice(0, 12);
 
   return (
     <div>

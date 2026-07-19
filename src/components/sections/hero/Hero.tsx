@@ -44,13 +44,6 @@ export default function Hero() {
               priority={true}
               className="object-cover"
             />
-            {/* Overlay text - only show on the first slide or keep static? The reference just had images. We will keep it static over all slides for now, or just on the first. Let's put it on all slides to keep the text visible. */}
-            <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-center p-4">
-              <Image src="/wallpaper_category.png" alt="Logo" width={80} height={80} className="mb-4 rounded-full border-2 border-white object-cover" />
-              <h1 className="text-white text-3xl md:text-5xl font-bold mb-2">SKS TOWER</h1>
-              <p className="text-white text-sm md:text-lg mb-4">SKS Tower, Shop-97, Level-2, Mohakhali, Dhaka</p>
-              <h2 className="text-white text-2xl md:text-4xl font-bold">Decor Culture এসকেএস টাওয়ারে</h2>
-            </div>
           </div>
         ))}
 

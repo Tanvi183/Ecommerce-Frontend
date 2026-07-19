@@ -68,7 +68,7 @@ export default function ProductSidebar() {
             <label key={cat} className="flex items-center gap-3 cursor-pointer group">
               <div className="relative w-10 h-10 border border-[#e5e5e5] bg-white flex-shrink-0">
                 {/* Simulated images for design match */}
-                <Image src="/glass_paper_category.png" alt={cat} fill className="object-cover p-0.5 opacity-60" />
+                <Image src="/glass_paper_category.png" alt={cat} fill sizes="40px" className="object-cover p-0.5 opacity-60" />
               </div>
               <span className="text-[14px] text-[#004f7b] group-hover:text-[#277b8c] transition-colors">{cat}</span>
             </label>
@@ -86,7 +86,7 @@ export default function ProductSidebar() {
           {["3D", "Embossed", "Floral", "Home", "Textured", "Modern"].map((brand) => (
             <label key={brand} className="flex items-center gap-3 cursor-pointer group">
               <div className="relative w-10 h-10 border border-[#e5e5e5] bg-white flex-shrink-0">
-                <Image src="/wallpaper_category.png" alt={brand} fill className="object-cover p-0.5 opacity-60" />
+                <Image src="/wallpaper_category.png" alt={brand} fill sizes="40px" className="object-cover p-0.5 opacity-60" />
               </div>
               <span className="text-[14px] text-[#004f7b] group-hover:text-[#277b8c] transition-colors">{brand}</span>
             </label>
